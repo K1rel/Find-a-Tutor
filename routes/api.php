@@ -13,6 +13,7 @@ use App\Http\Controllers\UserController;
 
 
 Route::middleware('auth:api')->group(function () {
+    Route::get('/posts', [PostController::class, 'index']);
     Route::post('/posts', [PostController::class, 'store']);
     Route::get('/posts/{id}', [PostController::class, 'show']);
     Route::put('/posts/{id}', [PostController::class, 'update']);
@@ -21,9 +22,9 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/posts/{id}/students/{student_id}', [PostController::class, 'removeStudent']);
 });
 
+Route::get('/current_user',[AuthController::class, 'currentUser'])->middleware('auth:api');;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
-Route::post('posts/{post}/students', [PostController::class, 'addStudent']);
 Route::delete('posts/{post}/students/{student}', [PostController::class, 'removeStudent']);
 
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');

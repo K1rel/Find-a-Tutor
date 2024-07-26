@@ -68,3 +68,23 @@ export const getUsers = async () => {
         throw error;
     }
 };
+
+export const getCurrentUser = async () => {
+    const token = localStorage.getItem("token"); // Ensure this matches your token storage logic
+
+    try {
+        const response = await api.get("/current_user", {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data.user;
+    } catch (error) {
+        console.error(
+            "Error fetching current user:",
+            error.response || error.message
+        );
+        throw error;
+    }
+};

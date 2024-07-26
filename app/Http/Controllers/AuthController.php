@@ -67,7 +67,7 @@ class AuthController extends Controller
     {
         $user = $request->user();
         if ($user) {
-            $user->api_token = null; // Clear the API token
+            $user->api_token = null;
             $user->save();
             return response()->json(['message' => 'Logged out successfully']);
         }
@@ -75,6 +75,10 @@ class AuthController extends Controller
         return response()->json(['message' => 'No user found'], 401);
     }
 
-
+    public function currentUser(Request $request)
+    {
+     
+        return response()->json(['user' => $request->user()]);
+    }
     
 }

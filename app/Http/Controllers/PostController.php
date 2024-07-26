@@ -96,25 +96,39 @@ class PostController extends Controller
 
     public function addStudent(Request $request, $id)
     {
-        $post = Post::findOrFail($id);
+      
+    $post = Post::findOrFail($id);
+    $user = Auth::user();
 
-        if ($post->students()->count() >= $post->maxCount) {
-            return response()->json(['message' => 'The maximum number of students has been reached.'], 400);
+    if ($post->students()->count() >= $post->maxCount) {
+        return response()->json(['message' => 'The maximum number of students has been reached.'], 400);
+    }
+
+    if ($user->role === 'student') {
+        
+        if ($post->students()->where('user_id', $user->id)->exists()) {
+            return response()->json(['message' => 'Student already added to the post.'], 400);
         }
 
-        $validated = $request->validate([
-            'student_id' => 'required|exists:users,id',
-        ]);
+        $post->students()->attach($user->id);
+        return response()->json(['message' => 'Student added to post'], 200);
+    } elseif ($user->role === 'teacher' && $post->user_id === $user->id) {
+       
+        $studentId = $request->input('student_id');
 
-        $student = User::findOrFail($validated['student_id']);
-
-        if ($student->role !== 'student') {
-            return response()->json(['message' => 'Only students can join the post.'], 400);
+        if (!$studentId || !User::where('id', $studentId)->where('role', 'student')->exists()) {
+            return response()->json(['message' => 'Invalid student ID.'], 400);
         }
 
-        $post->students()->attach($validated['student_id']);
+        if ($post->students()->where('student_id', $studentId)->exists()) {
+            return response()->json(['message' => 'Student already added to the post.'], 400);
+        }
 
-        return response()->json(['message' => 'Student added successfully.'], 200);
+        $post->students()->attach($studentId);
+        return response()->json(['message' => 'Student added to post'], 200);
+    } else {
+        return response()->json(['message' => 'Only students can join the post.'], 400);
+    }
     }
 
     public function removeStudent($id, $student_id)
