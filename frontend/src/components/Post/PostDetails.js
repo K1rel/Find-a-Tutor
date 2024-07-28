@@ -62,16 +62,27 @@ const PostDetail = () => {
                         {students.map((student) => (
                             <li key={student.id}>
                                 {student.first_name} {student.last_name}
-                                <button
-                                    onClick={() =>
-                                        handleRemoveStudent(student.id)
-                                    }
-                                >
-                                    Remove
-                                </button>
+                                {user?.role === "teacher" &&
+                                    post?.user_id === user.id && (
+                                        <button
+                                            onClick={() =>
+                                                handleRemoveStudent(student.id)
+                                            }
+                                        >
+                                            Remove
+                                        </button>
+                                    )}
                             </li>
                         ))}
                     </ul>
+                    {user &&
+                        students.some((student) => student.id === user.id) && (
+                            <button
+                                onClick={() => handleRemoveStudent(user.id)}
+                            >
+                                Leave Class
+                            </button>
+                        )}
                     {user?.role === "student" &&
                         !students.some((student) => student.id === user.id) && (
                             <button onClick={handleAddStudent}>Enroll</button>
