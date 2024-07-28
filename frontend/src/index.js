@@ -13,23 +13,27 @@ import Layout from "./components/Layout";
 import Home from "./components/Basic/Home";
 import About from "./components/Basic/About";
 import Contact from "./components/Basic/Contact";
+import { UserProvider } from "./Context/UserContext";
 
 ReactDOM.render(
     <Router>
-        <Layout>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/logout" element={<Logout />} />
-                <Route path="/posts" element={<PostsList />} />
-                <Route path="/posts/:id" element={<PostDetail />} />
-                <Route path="/create-post" element={<CreatePostForm />} />
-                <Route path="/update-post/:id" element={<EditPostForm />} />
-            </Routes>
-        </Layout>
+        <UserProvider>
+            <Layout>
+                <Routes>
+                    {" "}
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/logout" element={<Logout />} />
+                    <Route path="/posts" element={<PostsList />} />
+                    <Route path="/posts/:id" element={<PostDetail />} />
+                    <Route path="/create-post" element={<CreatePostForm />} />
+                    <Route path="/update-post/:id" element={<EditPostForm />} />
+                </Routes>
+            </Layout>
+        </UserProvider>
     </Router>,
     document.getElementById("root")
 );

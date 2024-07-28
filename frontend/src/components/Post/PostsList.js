@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getPosts } from "../../services/postService";
 import { Link } from "react-router-dom";
+import { useUser } from "../../Context/UserContext";
 
 const PostList = () => {
     const [posts, setPosts] = useState([]);
-
+    const { user } = useUser();
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -20,6 +21,7 @@ const PostList = () => {
 
     return (
         <div>
+            {user.role === "teacher" && <Link to="/posts">Be a Tutor</Link>}
             <h1>Posts</h1>
             <ul>
                 {posts.map((post) => (

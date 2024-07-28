@@ -106,7 +106,7 @@ class PostController extends Controller
 
     if ($user->role === 'student') {
         
-        if ($post->students()->where('user_id', $user->id)->exists()) {
+        if ($post->students()->where('student_id', $user->id)->exists()) {
             return response()->json(['message' => 'Student already added to the post.'], 400);
         }
 
@@ -134,11 +134,14 @@ class PostController extends Controller
     public function removeStudent($id, $student_id)
     {
         $post = Post::findOrFail($id);
-        if ($post->user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-        $post->students()->detach($student_id);
+        Log::info("Post ID: $id, Student ID: $student_id, Auth User ID: " . Auth::id() );
+        if ($post->user_id == Auth::id() || Auth::id() == $student_id) {
+            $post->students()->detach($student_id);
 
-        return response()->json(['message' => 'Student removed successfully.'], 200);
+            return response()->json(['message' => 'Student removed successfully.'], 200);
+        
+        }
+        return response()->json(['message' => 'Unauthorized'], 403);
+     
     }
 }

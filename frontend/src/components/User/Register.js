@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { registerUser } from "../../services/userService";
 
+import { useUser } from "../../Context/UserContext";
+import { useNavigate } from "react-router-dom";
 const Register = () => {
+    const { setUser } = useUser();
     const [formData, setFormData] = useState({
         first_name: "",
         last_name: "",
@@ -11,6 +14,7 @@ const Register = () => {
         role: "student",
         profile_picture: null,
     });
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         if (e.target.name === "profile_picture") {
@@ -23,8 +27,10 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await registerUser(formData);
+            const user = await registerUser(formData);
+            setUser(user);
             alert("Registration successful!");
+            navigate("/");
         } catch (error) {
             console.error("Registration error:", error);
             alert("Registration failed.");

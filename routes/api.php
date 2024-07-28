@@ -25,7 +25,7 @@ Route::middleware('auth:api')->group(function () {
 Route::get('/current_user',[AuthController::class, 'currentUser'])->middleware('auth:api');;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
-Route::delete('posts/{post}/students/{student}', [PostController::class, 'removeStudent']);
+// Route::delete('posts/{post}/students/{student}', [PostController::class, 'removeStudent']);
 
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
 

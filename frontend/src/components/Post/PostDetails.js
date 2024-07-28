@@ -5,15 +5,14 @@ import {
     addStudentToPost,
     removeStudentFromPost,
 } from "../../services/postService";
-import { getUsers, getCurrentUser } from "../../services/userService";
+import { useUser } from "../../Context/UserContext";
 
 const PostDetail = () => {
     const { id } = useParams();
+    const { user, allUsers } = useUser();
     const [post, setPost] = useState(null);
     const [students, setStudents] = useState([]);
-    const [allStudents, setAllStudents] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState("");
-    const [user, setUser] = useState(null);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -26,29 +25,7 @@ const PostDetail = () => {
             }
         };
 
-        const fetchUsers = async () => {
-            try {
-                const users = await getUsers();
-                const studentUsers = users.filter(
-                    (user) => user.role === "student"
-                );
-                setAllStudents(studentUsers);
-            } catch (error) {
-                console.error("Error fetching users:", error);
-            }
-        };
-        const fetchCurrentUser = async () => {
-            try {
-                const currentUser = await getCurrentUser();
-                setUser(currentUser);
-            } catch (error) {
-                console.error("Error fetching current user:", error);
-            }
-        };
-
         fetchPost();
-        fetchUsers();
-        fetchCurrentUser();
     }, [id]);
 
     const handleAddStudent = async () => {
@@ -66,7 +43,9 @@ const PostDetail = () => {
     const handleRemoveStudent = async (studentId) => {
         try {
             await removeStudentFromPost(id, studentId);
-            setStudents(students.filter((student) => student.id !== studentId));
+            const postData = await getPost(id);
+            setPost(postData);
+            setStudents(postData.students);
         } catch (error) {
             console.error("Error removing student:", error);
         }
@@ -107,11 +86,17 @@ const PostDetail = () => {
                                 }
                             >
                                 <option value="">Select a student</option>
-                                {allStudents.map((student) => (
-                                    <option key={student.id} value={student.id}>
-                                        {student.first_name} {student.last_name}
-                                    </option>
-                                ))}
+                                {allUsers
+                                    .filter((user) => user.role === "student")
+                                    .map((student) => (
+                                        <option
+                                            key={student.id}
+                                            value={student.id}
+                                        >
+                                            {student.first_name}{" "}
+                                            {student.last_name}
+                                        </option>
+                                    ))}
                             </select>
                             <button onClick={handleAddStudent}>
                                 Add Student
