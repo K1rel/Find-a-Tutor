@@ -81,6 +81,6 @@ export const findUser = async (id) => {
 };
 
 export const updateUserProfile = async (userId, profileData) => {
-    const response = await api.put(`/api/users/${userId}`, profileData);
+    const response = await api.put(`/users/${userId}`, profileData);
     return response.data;
 };

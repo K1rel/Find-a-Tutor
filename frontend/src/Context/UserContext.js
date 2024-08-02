@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [profile, setProfile] = useState(null);
     const [allUsers, setAllUsers] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const fetchUserData = useCallback(async (id) => {
         setLoading(true);
@@ -76,6 +76,7 @@ export const UserProvider = ({ children }) => {
                 loading,
                 setLoading,
                 fetchUserData,
+                setProfile,
             }}
         >
             {children}

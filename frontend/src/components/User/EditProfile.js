@@ -1,26 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useUser } from "../../Context/UserContext";
 
 import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
-    const { user, updateUser, profile, setProfile, setUserId } = useUser();
+    const { user, updateUser, profile, setProfile, fetchUserData, loading } =
+        useUser();
 
     const navigate = useNavigate();
-
     useEffect(() => {
         const fetchProfile = async () => {
-            try {
-                setUserId(user.id);
-            } catch (error) {
-                console.error("Error fetching profile data:", error);
+            if (user && !profile) {
+                try {
+                    await fetchUserData(user.id);
+                } catch (error) {
+                    console.error("Error fetching profile data:", error);
+                }
             }
         };
 
-        if (user) {
-            fetchProfile();
-        }
-    }, [setUserId, user]);
+        fetchProfile();
+    }, [user, profile, fetchUserData]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    if (!profile || user.id !== profile.id) {
+        return navigate("/");
+    }
 
     const handleChange = (e) => {
         setProfile({
@@ -32,13 +39,12 @@ const EditProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            updateUser(user.id, profile);
+            await updateUser(user.id, profile);
             navigate("/profile");
         } catch (error) {
             console.error("Error updating profile:", error);
         }
     };
-
     return (
         <div>
             <h1>Edit Profile</h1>
@@ -74,11 +80,11 @@ const EditProfile = () => {
                     />
                 </label>
                 <label>
-                    Profile Picture URL:
+                    Profile Picture :
                     <input
-                        type="text"
+                        type="file"
                         name="pfp"
-                        value={profile.pfp}
+                        value={profile.profile_picture}
                         onChange={handleChange}
                     />
                 </label>

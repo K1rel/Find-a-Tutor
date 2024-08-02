@@ -34,7 +34,7 @@ ReactDOM.render(
                     <Route path="/create-post" element={<CreatePostForm />} />
                     <Route path="/update-post/:id" element={<EditPostForm />} />
                     <Route path="/profile" element={<Profile />} />
-                    <Route path="/profile/edit" component={<EditProfile />} />
+                    <Route path="/profile/edit" element={<EditProfile />} />
                 </Routes>
             </Layout>
         </UserProvider>
