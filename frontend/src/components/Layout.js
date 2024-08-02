@@ -20,15 +20,22 @@ const Layout = ({ children }) => {
                         <Link to="/contact">Contact</Link>
                     </li>
                     {user && (
-                        <li>
+                        <>
                             {user.role === "teacher" && (
-                                <Link to="/posts">Be a Tutor</Link>
+                                <li>
+                                    <Link to="/posts">Be a Tutor</Link>
+                                </li>
                             )}
 
                             {user.role === "student" && (
-                                <Link to="/posts">Find a Tutor</Link>
+                                <li>
+                                    <Link to="/posts">Find a Tutor</Link>
+                                </li>
                             )}
-                        </li>
+                            <li>
+                                <Link to="/profile">Profile</Link>
+                            </li>
+                        </>
                     )}
                     {user ? (
                         <>

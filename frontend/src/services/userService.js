@@ -1,9 +1,6 @@
-import axios from "axios";
+import api from "../axiosConfig";
 
 // Set up the API client
-const api = axios.create({
-    baseURL: "http://localhost:8000/api", // Update with your API base URL
-});
 
 // Register a new user
 export const registerUser = async (formData) => {
@@ -44,16 +41,7 @@ export const loginUser = async (loginData) => {
 // Logout the user
 export const logoutUser = async () => {
     try {
-        const token = localStorage.getItem("token");
-        await api.post(
-            "/logout",
-            {},
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+        await api.post("/logout");
         localStorage.removeItem("token"); // Remove token from localStorage
     } catch (error) {
         throw error;
@@ -70,15 +58,9 @@ export const getUsers = async () => {
 };
 
 export const getCurrentUser = async () => {
-    const token = localStorage.getItem("token"); // Ensure this matches your token storage logic
-
+    // Ensure this matches your token storage logic
     try {
-        const response = await api.get("/current_user", {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await api.get("/current_user");
         return response.data.user;
     } catch (error) {
         console.error(
@@ -87,4 +69,18 @@ export const getCurrentUser = async () => {
         );
         throw error;
     }
+};
+export const findUser = async (id) => {
+    try {
+        const response = await api.get(`/users/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        throw error;
+    }
+};
+
+export const updateUserProfile = async (userId, profileData) => {
+    const response = await api.put(`/api/users/${userId}`, profileData);
+    return response.data;
 };

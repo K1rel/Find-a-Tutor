@@ -13,6 +13,8 @@ import Layout from "./components/Layout";
 import Home from "./components/Basic/Home";
 import About from "./components/Basic/About";
 import Contact from "./components/Basic/Contact";
+import EditProfile from "./components/User/EditProfile";
+import Profile from "./components/User/Profile";
 import { UserProvider } from "./Context/UserContext";
 
 ReactDOM.render(
@@ -31,6 +33,8 @@ ReactDOM.render(
                     <Route path="/posts/:id" element={<PostDetail />} />
                     <Route path="/create-post" element={<CreatePostForm />} />
                     <Route path="/update-post/:id" element={<EditPostForm />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/profile/edit" component={<EditProfile />} />
                 </Routes>
             </Layout>
         </UserProvider>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
     getPost,
     addStudentToPost,
@@ -13,6 +13,7 @@ const PostDetail = () => {
     const [post, setPost] = useState(null);
     const [students, setStudents] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -33,7 +34,9 @@ const PostDetail = () => {
             await addStudentToPost(id, selectedStudent);
 
             const postData = await getPost(id);
+
             setPost(postData);
+
             setStudents(postData.students);
         } catch (error) {
             console.error("Error adding student:", error);
@@ -45,10 +48,15 @@ const PostDetail = () => {
             await removeStudentFromPost(id, studentId);
             const postData = await getPost(id);
             setPost(postData);
+
             setStudents(postData.students);
         } catch (error) {
             console.error("Error removing student:", error);
         }
+    };
+
+    const handleEditClick = () => {
+        navigate(`/update-post/${id}`);
     };
 
     return (
@@ -98,7 +106,14 @@ const PostDetail = () => {
                             >
                                 <option value="">Select a student</option>
                                 {allUsers
-                                    .filter((user) => user.role === "student")
+                                    .filter(
+                                        (user) =>
+                                            user.role === "student" &&
+                                            !students.some(
+                                                (student) =>
+                                                    student.id === user.id
+                                            )
+                                    )
                                     .map((student) => (
                                         <option
                                             key={student.id}
@@ -113,6 +128,9 @@ const PostDetail = () => {
                                 Add Student
                             </button>
                         </>
+                    )}
+                    {user?.role === "teacher" && post?.user_id === user.id && (
+                        <button onClick={handleEditClick}>Edit</button>
                     )}
                 </>
             ) : (

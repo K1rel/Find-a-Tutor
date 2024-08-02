@@ -21,7 +21,9 @@ const PostList = () => {
 
     return (
         <div>
-            {user.role === "teacher" && <Link to="/posts">Be a Tutor</Link>}
+            {user?.role === "teacher" && (
+                <Link to="/create-post">Create A Post</Link>
+            )}
             <h1>Posts</h1>
             <ul>
                 {posts.map((post) => (
