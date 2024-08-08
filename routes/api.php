@@ -20,15 +20,22 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
     Route::post('/posts/{id}/students', [PostController::class, 'addStudent']);
     Route::delete('/posts/{id}/students/{student_id}', [PostController::class, 'removeStudent']);
-});
+});// Route::delete('posts/{post}/students/{student}', [PostController::class, 'removeStudent']);
 
-Route::get('/current_user',[AuthController::class, 'currentUser'])->middleware('auth:api');;
+
+//users
+Route::get('/current_user',[AuthController::class, 'currentUser'])->middleware('auth:api');
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('/update-profile', [UserController::class, 'update'])->middleware('auth:api');
 Route::get('/users/{id}', [UserController::class, 'show']);
-// Route::delete('posts/{post}/students/{student}', [PostController::class, 'removeStudent']);
-
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+
+
+//contact
+
+
+
 
 Route::get('tags', [TagController::class, 'index']);
 Route::apiResource('users', UserController::class);

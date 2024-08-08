@@ -5,21 +5,14 @@ import { Link } from "react-router-dom";
 
 const Profile = () => {
     const { user, profile, loading, fetchUserData } = useUser();
-    useEffect(() => {
-        const fetchProfile = async () => {
-            if (user && !profile) {
-                try {
-                    await fetchUserData(user.id);
-                } catch (error) {
-                    console.error("Error fetching profile data:", error);
-                }
-            }
-        };
 
-        fetchProfile();
+    useEffect(() => {
+        if (user && !profile) {
+            fetchUserData(user.id);
+        }
     }, [user, profile, fetchUserData]);
 
-    if (loading) {
+    if (loading || !profile) {
         return <div>Loading...</div>;
     }
 
@@ -29,7 +22,10 @@ const Profile = () => {
             <p>First Name: {profile.first_name}</p>
             <p>Last Name: {profile.last_name}</p>
             <p>Email: {profile.email}</p>
-            <img src={profile.profile_picture} alt="Profile" />
+            <img
+                src={`${process.env.REACT_APP_API_BASE_URL}/storage/${profile.profile_picture}`}
+                alt="Profile"
+            />
             <Link to="/profile/edit">Edit Profile</Link>
         </div>
     );

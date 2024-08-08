@@ -80,7 +80,23 @@ export const findUser = async (id) => {
     }
 };
 
-export const updateUserProfile = async (userId, profileData) => {
-    const response = await api.put(`/users/${userId}`, profileData);
-    return response.data;
+export const updateUserProfile = async (profileData) => {
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(profileData)) {
+        if (value) {
+            formData.append(key, value);
+            console.log(`Appending ${key}:`, value);
+        }
+    }
+    try {
+        const response = await api.post("/update-profile", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error updating user profile:", error);
+        throw error;
+    }
 };

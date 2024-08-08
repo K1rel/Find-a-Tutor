@@ -55,12 +55,15 @@ export const UserProvider = ({ children }) => {
         fetchAllUsers();
     }, []);
 
-    const updateUser = async (id, profileData) => {
+    const updateUser = async (profileData) => {
         try {
-            const updatedUser = await updateUserProfile(id, profileData);
-            setUser(updatedUser);
-            setProfile(updatedUser);
+            await updateUserProfile(profileData);
         } catch (error) {
+            console.error("Update user error:", error);
+            if (error.response && error.response.status === 422) {
+                // Handle validation errors here if needed
+                console.error("Validation errors:", error.response.data.errors);
+            }
             throw error;
         }
     };
