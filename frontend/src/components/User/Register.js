@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { registerUser } from "../../services/userService";
-
 import { useUser } from "../../Context/UserContext";
 import { useNavigate } from "react-router-dom";
+import styles from "../../css/users/Register.module.css";
+
 const Register = () => {
     const { setUser } = useUser();
     const [formData, setFormData] = useState({
@@ -38,7 +39,7 @@ const Register = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={styles.formContainer}>
             <input
                 type="text"
                 name="first_name"
@@ -46,6 +47,7 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="First Name"
                 required
+                className={styles.inputField}
             />
             <input
                 type="text"
@@ -54,6 +56,7 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="Last Name"
                 required
+                className={styles.inputField}
             />
             <input
                 type="email"
@@ -62,6 +65,7 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="Email"
                 required
+                className={styles.inputField}
             />
             <input
                 type="password"
@@ -70,6 +74,7 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="Password"
                 required
+                className={styles.inputField}
             />
             <input
                 type="password"
@@ -78,13 +83,26 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="Confirm Password"
                 required
+                className={styles.inputField}
             />
-            <select name="role" value={formData.role} onChange={handleChange}>
+            <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className={styles.selectField}
+            >
                 <option value="student">Student</option>
                 <option value="teacher">Teacher</option>
             </select>
-            <input type="file" name="profile_picture" onChange={handleChange} />
-            <button type="submit">Register</button>
+            <input
+                type="file"
+                name="profile_picture"
+                onChange={handleChange}
+                className={styles.fileInput}
+            />
+            <button type="submit" className={styles.submitButton}>
+                Register
+            </button>
         </form>
     );
 };

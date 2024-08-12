@@ -7,56 +7,74 @@ const Layout = ({ children }) => {
     const { user, loading } = useUser();
 
     return (
-        <div>
-            <nav>
-                <ul>
+        <div className="layout">
+            <nav className="navbar">
+                <ul className="nav-links">
                     <li>
-                        <Link to="/">Home</Link>
+                        <Link to="/" className="nav-link">
+                            Home
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/about">About</Link>
+                        <Link to="/about" className="nav-link">
+                            About
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/contact">Contact</Link>
+                        <Link to="/contact" className="nav-link">
+                            Contact
+                        </Link>
                     </li>
                     {user && (
                         <>
                             {user.role === "teacher" && (
                                 <li>
-                                    <Link to="/posts">Be a Tutor</Link>
+                                    <Link to="/posts" className="nav-link">
+                                        Be a Tutor
+                                    </Link>
                                 </li>
                             )}
 
                             {user.role === "student" && (
                                 <li>
-                                    <Link to="/posts">Find a Tutor</Link>
+                                    <Link to="/posts" className="nav-link">
+                                        Find a Tutor
+                                    </Link>
                                 </li>
                             )}
                             <li>
-                                <Link to="/profile">Profile</Link>
+                                <Link to="/profile" className="nav-link">
+                                    Profile
+                                </Link>
                             </li>
                         </>
                     )}
                     {user ? (
                         <>
                             <li>
-                                <Link to="/logout">Logout</Link>
+                                <Link to="/logout" className="nav-link">
+                                    Logout
+                                </Link>
                             </li>
                         </>
                     ) : (
                         <>
                             <li>
-                                <Link to="/login">Login</Link>
+                                <Link to="/login" className="nav-link">
+                                    Login
+                                </Link>
                             </li>
                             <li>
-                                <Link to="/register">Register</Link>
+                                <Link to="/register" className="nav-link">
+                                    Register
+                                </Link>
                             </li>
                         </>
                     )}
                 </ul>
             </nav>
             <div className="container">{children}</div>
-            <footer>
+            <footer className="footer">
                 <p>
                     &copy; {new Date().getFullYear()} Find-A-Tutor-Online. All
                     rights reserved.

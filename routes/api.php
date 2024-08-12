@@ -6,11 +6,11 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
-
-
+use Illuminate\Support\Facades\Mail;
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/posts', [PostController::class, 'index']);
@@ -34,7 +34,8 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api')
 
 //contact
 
-
+Route::get('/contact', [ContactController::class,'show'])->name('contact.show');
+Route::post('/contact', [ContactController::class,'submit'])->name('contact.submit');
 
 
 Route::get('tags', [TagController::class, 'index']);
@@ -42,3 +43,4 @@ Route::apiResource('users', UserController::class);
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
+
