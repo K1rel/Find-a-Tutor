@@ -1,4 +1,10 @@
 /* General Layout Styles */
+
+body {
+    margin: auto;
+    padding: 0;
+}
+
 .layout {
     display: flex;
     flex-direction: column;

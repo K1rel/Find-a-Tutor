@@ -151,3 +151,12 @@
     text-align: center;
     margin-top: 20px;
 }
+.errorMessage {
+    color: #ff4d4d;
+    background-color: #fdd;
+    border: 1px solid #ff4d4d;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-size: 16px;
+}

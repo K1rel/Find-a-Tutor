@@ -39,6 +39,9 @@ const PostDetail = () => {
             setStudents(postData.students);
         } catch (error) {
             console.error("Error adding student:", error);
+            if (error.response && error.response.status === 400) {
+                setError(error.response.data.message);
+            }
         }
     };
 
@@ -51,7 +54,7 @@ const PostDetail = () => {
         } catch (error) {
             console.error("Error adding student:", error);
             if (error.response && error.response.status === 400) {
-                setError(error.response.data.message); // Set error message
+                setError(error.response.data.message);
             }
         }
     };
