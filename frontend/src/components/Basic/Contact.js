@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "../../css/basic/Contact.module.css";
 import api from "../../axiosConfig";
 
 const Contact = () => {
@@ -30,12 +31,13 @@ const Contact = () => {
     };
 
     return (
-        <div>
-            <h1>Contact Us</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
+        <div className={styles.contactContainer}>
+            <h1 className={styles.contactTitle}>Contact Us</h1>
+            <form className={styles.contactForm} onSubmit={handleSubmit}>
+                <label className={styles.formLabel}>
                     Name:
                     <input
+                        className={styles.inputField}
                         type="text"
                         name="name"
                         value={formData.name}
@@ -43,9 +45,10 @@ const Contact = () => {
                         required
                     />
                 </label>
-                <label>
+                <label className={styles.formLabel}>
                     Email:
                     <input
+                        className={styles.inputField}
                         type="email"
                         name="email"
                         value={formData.email}
@@ -53,18 +56,21 @@ const Contact = () => {
                         required
                     />
                 </label>
-                <label>
+                <label className={styles.formLabel}>
                     Message:
                     <textarea
+                        className={styles.textareaField}
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
                         required
                     />
                 </label>
-                <button type="submit">Send</button>
+                <button className={styles.submitButton} type="submit">
+                    Send
+                </button>
             </form>
-            {status && <p>{status}</p>}
+            {status && <p className={styles.statusMessage}>{status}</p>}
         </div>
     );
 };

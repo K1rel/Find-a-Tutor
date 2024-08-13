@@ -1,27 +1,19 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { logoutUser } from "../../services/userService";
 import { useUser } from "../../Context/UserContext";
+
 const Logout = () => {
-    const { setUser } = useUser();
+    const { logout } = useUser(); // Get the logout function from context
     const navigate = useNavigate();
 
     useEffect(() => {
-        const logout = async () => {
-            try {
-                await logoutUser();
-                setUser(null);
-                navigate("/login"); // Redirect to login page
-            } catch (error) {
-                console.error(
-                    "Logout error:",
-                    error.response?.data || error.message
-                );
-            }
+        const performLogout = async () => {
+            await logout(); // Call the logout function
+            navigate("/login"); // Redirect to login page
         };
 
-        logout();
-    }, [navigate, setUser]);
+        performLogout();
+    }, [logout, navigate]);
 
     return <div>Logging out...</div>;
 };

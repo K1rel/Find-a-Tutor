@@ -1,0 +1,153 @@
+/* PostDetails.module.css */
+
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    border-bottom: 2px solid #7e8ef1;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 24px;
+    color: #615efc;
+}
+
+.description {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.details {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #d1d8c5;
+}
+
+.details p {
+    font-size: 16px;
+    color: #555;
+    margin: 5px 0;
+}
+
+.studentsList {
+    margin: 20px 0;
+}
+
+.studentsList h2 {
+    font-size: 20px;
+    color: #7e8ef1;
+    margin-bottom: 10px;
+}
+
+.studentItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #d1d8c5;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.studentItem button {
+    background-color: #615efc;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.studentItem button:hover {
+    background-color: #7e8ef1;
+    transform: scale(1.05);
+}
+
+.studentItem button:active {
+    background-color: #d1d8c5;
+    color: #615efc;
+    transform: scale(0.95);
+}
+
+.selectStudent {
+    margin-bottom: 20px;
+}
+
+.selectStudent select {
+    padding: 10px;
+    border: 2px solid #d1d8c5;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #615efc;
+    width: calc(100% - 120px);
+    font-size: 16px;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.selectStudent button {
+    background-color: #615efc;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.selectStudent button:hover {
+    background-color: #7e8ef1;
+    transform: scale(1.05);
+}
+
+.selectStudent button:active {
+    background-color: #d1d8c5;
+    color: #615efc;
+    transform: scale(0.95);
+}
+
+.editButton {
+    background-color: #7e8ef1;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.editButton:hover {
+    background-color: #615efc;
+    transform: scale(1.05);
+}
+
+.editButton:active {
+    background-color: #d1d8c5;
+    color: #615efc;
+    transform: scale(0.95);
+}
+
+.loading {
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+}

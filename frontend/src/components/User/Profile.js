@@ -1,32 +1,31 @@
-import React, { useEffect } from "react";
-
+import React from "react";
 import { useUser } from "../../Context/UserContext";
 import { Link } from "react-router-dom";
+import styles from "../../css/users/Profile.module.css";
 
 const Profile = () => {
-    const { user, profile, loading, fetchUserData } = useUser();
+    const { user, loading } = useUser();
 
-    useEffect(() => {
-        if (user && !profile) {
-            fetchUserData(user.id);
-        }
-    }, [user, profile, fetchUserData]);
-
-    if (loading || !profile) {
+    if (loading || !user) {
         return <div>Loading...</div>;
     }
 
     return (
-        <div>
-            <h1>Profile</h1>
-            <p>First Name: {profile.first_name}</p>
-            <p>Last Name: {profile.last_name}</p>
-            <p>Email: {profile.email}</p>
+        <div className={styles.profileContainer}>
+            <h1 className={styles.profileTitle}>Profile</h1>
             <img
-                src={`${process.env.REACT_APP_API_BASE_URL}/storage/${profile.profile_picture}`}
+                src={`${process.env.REACT_APP_API_BASE_URL}/storage/${user.profile_picture}`}
                 alt="Profile"
+                className={styles.profileImage}
             />
-            <Link to="/profile/edit">Edit Profile</Link>
+            <div className={styles.profileInfo}>
+                <p>First Name: {user.first_name}</p>
+                <p>Last Name: {user.last_name}</p>
+                <p>Email: {user.email}</p>
+            </div>
+            <Link to="/profile/edit" className={styles.editProfileLink}>
+                Edit Profile
+            </Link>
         </div>
     );
 };

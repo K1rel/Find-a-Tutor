@@ -1,0 +1,94 @@
+.contactContainer {
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    background-color: #eeeeee;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.contactTitle {
+    color: #615efc;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.contactForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formLabel {
+    width: 100%;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.inputField,
+.textareaField {
+    width: 95%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 2px solid #d1d8c5;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #615efc;
+    font-size: 16px;
+}
+
+.textareaField {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.submitButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #615efc;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+.submitButton:hover {
+    background-color: #7e8ef1;
+    transform: scale(1.05);
+}
+
+.submitButton:active {
+    background-color: #d1d8c5;
+    color: #615efc;
+    transform: scale(0.95);
+}
+
+.statusMessage {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #7e8ef1;
+}
+
+@media (max-width: 600px) {
+    .contactContainer {
+        padding: 15px;
+        margin: 10px;
+    }
+
+    .contactTitle {
+        font-size: 2em;
+    }
+
+    .inputField,
+    .textareaField {
+        font-size: 14px;
+    }
+
+    .submitButton {
+        font-size: 14px;
+    }
+}

@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { loginUser } from "../../services/userService";
 import { useUser } from "../../Context/UserContext";
 import { useNavigate } from "react-router-dom";
+import styles from "../../css/users/Login.module.css";
 
 const Login = () => {
-    const { setUser } = useUser();
+    const { login } = useUser();
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
     const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,23 +18,16 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const user = await loginUser(formData);
-            setUser(user);
-            setIsLoggedIn(true);
+            await login(formData);
             navigate("/");
         } catch (error) {
             console.error("Login error:", error);
             alert("Login failed.");
         }
     };
-    useEffect(() => {
-        if (isLoggedIn) {
-            window.location.reload(); // Force a reload to ensure the user state is properly set
-        }
-    }, [isLoggedIn]);
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={styles.formContainer}>
             <input
                 type="email"
                 name="email"
@@ -43,6 +35,7 @@ const Login = () => {
                 onChange={handleChange}
                 placeholder="Email"
                 required
+                className={styles.inputField}
             />
             <input
                 type="password"
@@ -51,8 +44,11 @@ const Login = () => {
                 onChange={handleChange}
                 placeholder="Password"
                 required
+                className={styles.inputField}
             />
-            <button type="submit">Login</button>
+            <button type="submit" className={styles.button}>
+                Login
+            </button>
         </form>
     );
 };

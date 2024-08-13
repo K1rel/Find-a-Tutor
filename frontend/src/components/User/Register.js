@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "../../css/users/Register.module.css";
 
 const Register = () => {
-    const { setUser } = useUser();
+    const { register } = useUser();
     const [formData, setFormData] = useState({
         first_name: "",
         last_name: "",
@@ -28,8 +28,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const user = await registerUser(formData);
-            setUser(user);
+            await register(formData);
             alert("Registration successful!");
             navigate("/");
         } catch (error) {

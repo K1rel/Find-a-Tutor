@@ -25,9 +25,9 @@ const Layout = ({ children }) => {
                             Contact
                         </Link>
                     </li>
-                    {user && (
+                    {!loading && user && (
                         <>
-                            {user.role === "teacher" && (
+                            {user?.role === "teacher" && (
                                 <li>
                                     <Link to="/posts" className="nav-link">
                                         Be a Tutor
@@ -35,21 +35,24 @@ const Layout = ({ children }) => {
                                 </li>
                             )}
 
-                            {user.role === "student" && (
+                            {user?.role === "student" && (
                                 <li>
                                     <Link to="/posts" className="nav-link">
                                         Find a Tutor
                                     </Link>
                                 </li>
                             )}
-                            <li>
-                                <Link to="/profile" className="nav-link">
-                                    Profile
-                                </Link>
-                            </li>
+                            {user?.role && (
+                                <li>
+                                    <Link to="/profile" className="nav-link">
+                                        Profile
+                                    </Link>
+                                </li>
+                            )}
                         </>
                     )}
-                    {user ? (
+
+                    {user && !loading ? (
                         <>
                             <li>
                                 <Link to="/logout" className="nav-link">

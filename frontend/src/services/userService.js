@@ -42,7 +42,7 @@ export const loginUser = async (loginData) => {
 export const logoutUser = async () => {
     try {
         await api.post("/logout");
-        localStorage.removeItem("token"); // Remove token from localStorage
+        localStorage.removeItem("token");
     } catch (error) {
         throw error;
     }
@@ -82,12 +82,7 @@ export const findUser = async (id) => {
 
 export const updateUserProfile = async (profileData) => {
     const formData = new FormData();
-    for (const [key, value] of Object.entries(profileData)) {
-        if (value) {
-            formData.append(key, value);
-            console.log(`Appending ${key}:`, value);
-        }
-    }
+
     try {
         const response = await api.post("/update-profile", formData, {
             headers: {

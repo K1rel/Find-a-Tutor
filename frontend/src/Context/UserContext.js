@@ -10,6 +10,9 @@ import {
     getUsers,
     findUser,
     updateUserProfile,
+    logoutUser,
+    loginUser,
+    registerUser,
 } from "../services/userService";
 
 const UserContext = createContext();
@@ -34,12 +37,15 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => {
         const fetchCurrentUser = async () => {
+            setLoading(true);
             try {
                 const currentUser = await getCurrentUser();
 
                 setUser(currentUser);
             } catch (error) {
                 console.error("Error fetching current user:", error);
+            } finally {
+                setLoading(false);
             }
         };
         const fetchAllUsers = async () => {
@@ -55,15 +61,59 @@ export const UserProvider = ({ children }) => {
         fetchAllUsers();
     }, []);
 
+    const loggedUserProfile = async () => {
+        try {
+            setProfile(user);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        }
+    };
+
     const updateUser = async (profileData) => {
         try {
             await updateUserProfile(profileData);
+            const currentUser = await getCurrentUser();
+            setUser(currentUser);
+            setProfile(currentUser);
         } catch (error) {
             console.error("Update user error:", error);
             if (error.response && error.response.status === 422) {
-                // Handle validation errors here if needed
                 console.error("Validation errors:", error.response.data.errors);
             }
+            throw error;
+        }
+    };
+    const login = async (loginData) => {
+        try {
+            const { user, token } = await loginUser(loginData);
+            localStorage.setItem("token", token);
+            setUser(user);
+        } catch (error) {
+            console.error("Login error:", error);
+            throw error;
+        }
+    };
+    const logout = async () => {
+        try {
+            await logoutUser();
+            setUser(null);
+            setProfile(null);
+        } catch (error) {
+            console.error(
+                "Logout error:",
+                error.response?.data || error.message
+            );
+        }
+    };
+
+    const register = async (formData) => {
+        try {
+            const response = await registerUser(formData);
+            setUser(response.user);
+            localStorage.setItem("token", response.token);
+            return response;
+        } catch (error) {
+            console.error("Registration error:", error);
             throw error;
         }
     };
@@ -80,6 +130,10 @@ export const UserProvider = ({ children }) => {
                 setLoading,
                 fetchUserData,
                 setProfile,
+                logout,
+                login,
+                loggedUserProfile,
+                register,
             }}
         >
             {children}

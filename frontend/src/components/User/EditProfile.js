@@ -1,10 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useUser } from "../../Context/UserContext";
-
 import { useNavigate } from "react-router-dom";
+import styles from "../../css/users/Edit.module.css";
 
 const EditProfile = () => {
-    const { user, loading, updateUser, fetchUserData, profile } = useUser();
+    const {
+        user,
+        loading,
+        updateUser,
+        fetchUserData,
+        profile,
+        loggedUserProfile,
+    } = useUser();
     const [formData, setFormData] = useState({
         first_name: profile?.first_name || "",
         last_name: profile?.last_name || "",
@@ -14,10 +21,11 @@ const EditProfile = () => {
     const [file, setFile] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
+
     const handleSubmit = useCallback(
         async (e) => {
             e.preventDefault();
-            if (isSubmitting) return; // Prevent multiple submissions
+            if (isSubmitting) return;
             setIsSubmitting(true);
             try {
                 const updatedProfileData = { ...formData };
@@ -25,8 +33,7 @@ const EditProfile = () => {
                     updatedProfileData.profile_picture = file;
                 }
                 await updateUser(updatedProfileData);
-                await fetchUserData(user.id);
-                await fetch;
+
                 navigate("/profile");
             } catch (error) {
                 console.error("Error updating profile:", error);
@@ -34,16 +41,9 @@ const EditProfile = () => {
                 setIsSubmitting(false);
             }
         },
-        [
-            formData,
-            file,
-            updateUser,
-            fetchUserData,
-            user.id,
-            navigate,
-            isSubmitting,
-        ]
+        [formData, file, updateUser, navigate, isSubmitting]
     );
+
     useEffect(() => {
         if (profile) {
             setFormData({
@@ -56,11 +56,24 @@ const EditProfile = () => {
     }, [profile]);
 
     useEffect(() => {
-        setFile(null); // Clear file input when profile data is loaded
+        setFile(null);
     }, []);
+    useEffect(() => {
+        const loadUserProfile = async () => {
+            try {
+                await loggedUserProfile();
+            } catch (error) {
+                console.error("Error fetching user profile:", error);
+            }
+        };
+
+        loadUserProfile();
+    }, [loggedUserProfile]);
+
     if (loading && !user) {
         return <div>Loading...</div>;
     }
+
     if (!profile || user.id !== profile.id) {
         return navigate("/");
     }
@@ -75,10 +88,10 @@ const EditProfile = () => {
     };
 
     return (
-        <div>
-            <h1>Edit Profile</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
+        <div className={styles.editProfileContainer}>
+            <h1 className={styles.title}>Edit Profile</h1>
+            <form onSubmit={handleSubmit} className={styles.form}>
+                <label className={styles.label}>
                     First Name:
                     <input
                         type="text"
@@ -86,9 +99,10 @@ const EditProfile = () => {
                         value={formData.first_name}
                         onChange={handleChange}
                         required
+                        className={styles.inputField}
                     />
                 </label>
-                <label>
+                <label className={styles.label}>
                     Last Name:
                     <input
                         type="text"
@@ -96,9 +110,10 @@ const EditProfile = () => {
                         value={formData.last_name}
                         onChange={handleChange}
                         required
+                        className={styles.inputField}
                     />
                 </label>
-                <label>
+                <label className={styles.label}>
                     Email:
                     <input
                         type="email"
@@ -106,31 +121,35 @@ const EditProfile = () => {
                         value={formData.email}
                         onChange={handleChange}
                         required
+                        className={styles.inputField}
                     />
                 </label>
-                <label>
+                <label className={styles.label}>
                     Current Profile Picture:
                     {formData.profile_picture && (
                         <img
                             src={`${process.env.REACT_APP_API_BASE_URL}/storage/${formData.profile_picture}`}
                             alt="Profile"
-                            style={{
-                                width: "100px",
-                                height: "100px",
-                                objectFit: "cover",
-                            }}
+                            className={styles.profileImage}
                         />
                     )}
                 </label>
-                <label>
+                <label className={styles.label}>
                     Change Profile Picture:
                     <input
                         type="file"
                         name="profile_picture"
                         onChange={handleChange}
+                        className={styles.fileInput}
                     />
                 </label>
-                <button type="submit">Save</button>
+                <button
+                    type="submit"
+                    className={styles.submitButton}
+                    disabled={isSubmitting}
+                >
+                    Save
+                </button>
             </form>
         </div>
     );

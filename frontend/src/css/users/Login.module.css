@@ -3,72 +3,62 @@
     flex-direction: column;
     align-items: center;
     background-color: #eeeeee;
-    padding: 20px;
+    padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 400px;
-    margin: 0 auto;
+    margin: 50px auto;
 }
 
 .inputField {
     width: 100%;
     padding: 10px;
-    margin: 10px 0;
-    border: 2px solid #d1d8c5;
+    margin-bottom: 15px;
+    border: 2px solid #7e8ef1;
     border-radius: 5px;
-    background-color: #fff;
-    color: #615efc;
+    outline: none;
+    transition: border-color 0.3s ease;
 }
 
-.fileInput {
-    margin: 10px 0;
+.inputField:focus {
+    border-color: #615efc;
 }
 
-.submitButton {
-    width: 100%;
-    padding: 10px;
+.button {
     background-color: #615efc;
     color: #ffffff;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    font-size: 16px;
     cursor: pointer;
+    font-size: 16px;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%;
+    text-align: center;
 }
 
-.submitButton:hover {
+.button:hover {
     background-color: #7e8ef1;
     transform: scale(1.05);
 }
 
-.submitButton:active {
+.button:active {
     background-color: #d1d8c5;
     color: #615efc;
     transform: scale(0.95);
 }
 
-.selectField {
-    background-color: #d1d8c5;
-    color: #615efc;
-}
-
-.inputField::placeholder {
+input::placeholder {
     color: #7e8ef1;
-}
-
-.inputField:focus,
-.selectField:focus {
-    border-color: #615efc;
-    outline: none;
 }
 
 @media (max-width: 600px) {
     .formContainer {
-        padding: 15px;
+        padding: 20px;
         max-width: 90%;
     }
 
-    .submitButton {
+    .button {
         font-size: 14px;
     }
 }
