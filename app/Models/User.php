@@ -41,7 +41,22 @@ class User extends Authenticatable
         ];
     }
     public function posts()
-{
+    {
     return $this->hasMany(Post::class);
-}
+    }
+
+    public function teacherProfile()
+    {
+        return $this->hasOne(TeacherProfile::class);
+    }
+
+    public function reviewsGiven()
+    {
+        return $this->hasMany(Review::class, 'student_id');
+    }
+
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Review::class, 'teacher_id');
+    }
 }

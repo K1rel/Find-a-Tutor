@@ -14,7 +14,11 @@ const Register = () => {
         password_confirmation: "",
         role: "student",
         profile_picture: null,
+        rate: "", // New field for teacher rate
+        availability: "", // New field for teacher availability
+        willing_to_travel: "", // New field for teacher travel distance
     });
+    const [showTeacherFields, setShowTeacherFields] = useState(false); // State to show/hide teacher fields
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -23,6 +27,12 @@ const Register = () => {
         } else {
             setFormData({ ...formData, [e.target.name]: e.target.value });
         }
+    };
+
+    const handleRoleChange = (e) => {
+        const role = e.target.value;
+        setFormData({ ...formData, role });
+        setShowTeacherFields(role === "teacher");
     };
 
     const handleSubmit = async (e) => {
@@ -87,7 +97,7 @@ const Register = () => {
             <select
                 name="role"
                 value={formData.role}
-                onChange={handleChange}
+                onChange={handleRoleChange}
                 className={styles.selectField}
             >
                 <option value="student">Student</option>
@@ -99,6 +109,39 @@ const Register = () => {
                 onChange={handleChange}
                 className={styles.fileInput}
             />
+
+            {showTeacherFields && (
+                <>
+                    <input
+                        type="number"
+                        name="rate"
+                        value={formData.rate}
+                        onChange={handleChange}
+                        placeholder="Rate (e.g., 30)"
+                        className={styles.inputField}
+                    />
+                    <select
+                        name="availability"
+                        value={formData.availability}
+                        onChange={handleChange}
+                        className={styles.selectField}
+                    >
+                        <option value="">Select Availability</option>
+                        <option value="online">Online</option>
+                        <option value="in_person">In Person</option>
+                        <option value="both">Both</option>
+                    </select>
+                    <input
+                        type="number"
+                        name="willing_to_travel"
+                        value={formData.willing_to_travel}
+                        onChange={handleChange}
+                        placeholder="Willing to Travel (in km)"
+                        className={styles.inputField}
+                    />
+                </>
+            )}
+
             <button type="submit" className={styles.submitButton}>
                 Register
             </button>

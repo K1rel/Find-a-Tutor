@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { createPost, updatePost, getPost } from "../../services/postService";
 import { getTags } from "../../services/tagService";
 import styles from "../../css/posts/PostForm.module.css";
@@ -15,6 +16,7 @@ const PostForm = ({ postId, onSuccess }) => {
     const [tags, setTags] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
     useEffect(() => {
         if (postId) {
             const fetchPost = async () => {
@@ -68,6 +70,7 @@ const PostForm = ({ postId, onSuccess }) => {
                 await createPost(post);
             }
             onSuccess();
+            navigate(`/posts/${postId}`);
         } catch (error) {
             console.error("Error saving post:", error);
         }

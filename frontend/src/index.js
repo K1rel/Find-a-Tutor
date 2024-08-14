@@ -16,6 +16,7 @@ import Contact from "./components/Basic/Contact";
 import EditProfile from "./components/User/EditProfile";
 import Profile from "./components/User/Profile";
 import { UserProvider } from "./Context/UserContext";
+import TeacherProfile from "./components/Teacher/TeacherProfile";
 
 ReactDOM.render(
     <Router>
@@ -35,6 +36,10 @@ ReactDOM.render(
                     <Route path="/update-post/:id" element={<EditPostForm />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/profile/edit" element={<EditProfile />} />
+                    <Route
+                        path="/teacher-profile/:id"
+                        element={<TeacherProfile />}
+                    />
                 </Routes>
             </Layout>
         </UserProvider>

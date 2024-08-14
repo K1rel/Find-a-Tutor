@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\TeacherProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Mail;
 
@@ -44,3 +46,7 @@ Route::apiResource('users', UserController::class);
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
+
+//teachers
+Route::get('/teacher-profiles/{id}', [TeacherProfileController::class, 'show']);
+Route::post('/reviews', [ReviewController::class, 'store']);

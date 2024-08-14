@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TeacherProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,10 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:student,teacher',
-            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:10000'
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:10000',
+            'rate' => 'nullable|integer|min:0', 
+            'availability' => 'nullable|string',
+            'willing_to_travel' => 'nullable|integer|min:0'
         ]);
 
         if ($request->hasFile('profile_picture')) {
@@ -38,6 +42,15 @@ class AuthController extends Controller
             'role' => $request->role,
             'profile_picture' => $profilePicturePath, // Save file path
         ]);
+
+        if ($validated['role'] === 'teacher') {
+            TeacherProfile::create([
+                'user_id' => $user->id,
+                'rate' => $validated['rate'] ?? null,
+                'availability' => $request->input('availability') ?? null,
+                'willing_to_travel' => $request->input('willing_to_travel') ?? null,
+            ]);
+        }
 
         return response()->json([
             'message' => 'User registered successfully',
