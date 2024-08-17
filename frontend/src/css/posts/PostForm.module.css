@@ -11,7 +11,7 @@
     margin: 20px auto;
 }
 
-.formContainer h1 {
+.formTitle {
     color: #615efc;
     margin-bottom: 20px;
 }
@@ -25,8 +25,8 @@
 }
 
 .inputField,
-textarea,
-select {
+.textAreaField,
+.selectField {
     width: 100%;
     padding: 10px;
     border: 2px solid #d1d8c5;
@@ -38,19 +38,19 @@ select {
 }
 
 .inputField:focus,
-textarea:focus,
-select:focus {
+.textAreaField:focus,
+.selectField:focus {
     border-color: #615efc;
     box-shadow: 0 0 5px rgba(97, 94, 252, 0.5);
     outline: none;
 }
 
-textarea {
+.textAreaField {
     height: 150px;
     resize: vertical;
 }
 
-button {
+.submitButton {
     width: 100%;
     padding: 10px;
     background-color: #615efc;
@@ -62,12 +62,12 @@ button {
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-button:hover {
+.submitButton:hover {
     background-color: #7e8ef1;
     transform: scale(1.05);
 }
 
-button:active {
+.submitButton:active {
     background-color: #d1d8c5;
     color: #615efc;
     transform: scale(0.95);

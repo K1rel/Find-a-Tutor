@@ -15,6 +15,7 @@ import About from "./components/Basic/About";
 import Contact from "./components/Basic/Contact";
 import EditProfile from "./components/User/EditProfile";
 import Profile from "./components/User/Profile";
+import Review from "./components/Teacher/Review";
 import { UserProvider } from "./Context/UserContext";
 import TeacherProfile from "./components/Teacher/TeacherProfile";
 
@@ -40,6 +41,7 @@ ReactDOM.render(
                         path="/teacher-profile/:id"
                         element={<TeacherProfile />}
                     />
+                    <Route path="/write-review/:id" element={<Review />} />
                 </Routes>
             </Layout>
         </UserProvider>

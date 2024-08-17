@@ -8,20 +8,24 @@ const TeacherProfile = () => {
     const [teacher, setTeacher] = useState(null);
     const { id } = useParams();
     const navigate = useNavigate();
-    const { user } = useUser(); // Access the current user
+    const { user, fetchUserData } = useUser();
 
     useEffect(() => {
         const fetchTeacherProfile = async () => {
             try {
                 const response = await api.get(`/teacher-profiles/${id}`);
-                setTeacher(response.data);
+
+                const parsedLanguages = JSON.parse(
+                    response.data.languages || "[]"
+                );
+                setTeacher({ ...response.data, languages: parsedLanguages });
             } catch (error) {
                 console.error("Error fetching teacher profile:", error);
             }
         };
 
         fetchTeacherProfile();
-    }, [id]);
+    }, []);
 
     const handleGoBack = () => {
         navigate(-1); // Go back to the previous page
@@ -46,9 +50,7 @@ const TeacherProfile = () => {
                     <h1>
                         {teacher.user.first_name} {teacher.user.last_name}
                     </h1>
-                    <p>
-                        <strong>Rate:</strong> ${teacher.rate} per hour
-                    </p>
+
                     <p>
                         <strong>Availability:</strong> {teacher.availability}
                     </p>
@@ -56,13 +58,19 @@ const TeacherProfile = () => {
                         <strong>Willing to travel:</strong>{" "}
                         {teacher.willing_to_travel} km
                     </p>
-                    {/* Render reviews here */}
+                    <p>
+                        <strong>Languages:</strong>{" "}
+                        {teacher.languages && teacher.languages.length > 0
+                            ? teacher.languages.join(", ")
+                            : "Not specified"}
+                    </p>
+
                     {user?.role === "student" && (
                         <button
                             className={styles.reviewButton}
                             onClick={handleReview}
                         >
-                            Leave a Review
+                            Reviews
                         </button>
                     )}
                 </>

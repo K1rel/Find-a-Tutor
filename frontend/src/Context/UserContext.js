@@ -23,7 +23,7 @@ export const UserProvider = ({ children }) => {
     const [allUsers, setAllUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchUserData = useCallback(async (id) => {
+    const fetchUserData = async (id) => {
         setLoading(true);
         try {
             const userData = await findUser(id);
@@ -33,7 +33,7 @@ export const UserProvider = ({ children }) => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    };
 
     useEffect(() => {
         const fetchCurrentUser = async () => {
@@ -64,6 +64,7 @@ export const UserProvider = ({ children }) => {
     const loggedUserProfile = async () => {
         try {
             setProfile(user);
+            console.log(profile);
         } catch (error) {
             console.error("Error fetching users:", error);
         }
@@ -72,6 +73,7 @@ export const UserProvider = ({ children }) => {
     const updateUser = async (profileData) => {
         try {
             await updateUserProfile(profileData);
+
             const currentUser = await getCurrentUser();
             setUser(currentUser);
             setProfile(currentUser);
@@ -109,8 +111,7 @@ export const UserProvider = ({ children }) => {
     const register = async (formData) => {
         try {
             const response = await registerUser(formData);
-            setUser(response.user);
-            localStorage.setItem("token", response.token);
+            await login({ email: formData.email, password: formData.password });
             return response;
         } catch (error) {
             console.error("Registration error:", error);

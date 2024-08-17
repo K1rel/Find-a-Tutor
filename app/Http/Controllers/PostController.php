@@ -69,6 +69,7 @@ class PostController extends Controller
             'dateFirstClass' => 'sometimes|required|date',
             'tag_id' => 'sometimes|required|exists:tags,id',
             'maxCount' => 'sometimes|required|integer|min:1',
+            'rate' => 'required|integer',
         ]);
 
         $post = Post::findOrFail($id);

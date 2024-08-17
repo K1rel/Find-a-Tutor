@@ -52,7 +52,7 @@ const PostDetail = () => {
             setPost(postData);
             setStudents(postData.students);
         } catch (error) {
-            console.error("Error adding student:", error);
+            console.error("Error removing student:", error);
             if (error.response && error.response.status === 400) {
                 setError(error.response.data.message);
             }
@@ -64,157 +64,179 @@ const PostDetail = () => {
     };
 
     return (
-        <div className={styles.container}>
-            {post ? (
-                <>
-                    <div className={styles.profileCard}>
-                        <img
-                            src={`${process.env.REACT_APP_API_BASE_URL}/storage/${post.user.profile_picture}`}
-                            alt={`${post.user.first_name} ${post.user.last_name}`}
-                            className={styles.profilePicture}
-                        />
-                        <p className={styles.profileName}>
-                            {post.user.first_name} {post.user.last_name}
-                        </p>
-                        <Link
-                            to={`/teacher-profile/${post.user.id}`}
-                            className={styles.profileLink}
-                        >
-                            View Professor's Profile
-                        </Link>
-                    </div>
-                    <div className={styles.mainCard}>
-                        <div className={styles.header}>
-                            <h1>{post.title}</h1>
+        <>
+            {" "}
+            <button
+                className={styles.goBackButton}
+                onClick={() => navigate(-1)}
+            >
+                Go Back
+            </button>
+            <div className={styles.container}>
+                {post ? (
+                    <>
+                        <div className={styles.profileCard}>
+                            <img
+                                src={`${process.env.REACT_APP_API_BASE_URL}/storage/${post.user.profile_picture}`}
+                                alt={`${post.user.first_name} ${post.user.last_name}`}
+                                className={styles.profilePicture}
+                            />
+                            <p className={styles.profileName}>
+                                {post.user.first_name} {post.user.last_name}
+                            </p>
+                            <Link
+                                to={`/teacher-profile/${post.user.id}`}
+                                className={styles.profileLink}
+                            >
+                                View Professor's Profile
+                            </Link>
                         </div>
-                        <p className={styles.description}>{post.description}</p>
-                        <div className={styles.details}>
-                            <p>
-                                <strong>Location:</strong> {post.location}
+                        <div className={styles.mainCard}>
+                            <div className={styles.header}>
+                                <h1>{post.title}</h1>
+                            </div>
+                            <p className={styles.description}>
+                                {post.description}
                             </p>
-                            <p>
-                                <strong>Maximum Students:</strong>{" "}
-                                {post.maxCount}
-                            </p>
-                            <p>
-                                <strong>First Class Date:</strong>{" "}
-                                {new Date(
-                                    post.dateFirstClass
-                                ).toLocaleDateString()}
-                            </p>
-                        </div>
-                        <div className={styles.studentsList}>
-                            <h2>Students</h2>
-                            <ul>
-                                {students.map((student) => (
-                                    <li
-                                        key={student.id}
-                                        className={styles.studentItem}
-                                    >
-                                        {student.first_name} {student.last_name}
-                                        {user?.role === "teacher" &&
-                                            post?.user_id === user.id && (
-                                                <button
-                                                    onClick={() =>
-                                                        handleRemoveStudent(
-                                                            student.id
-                                                        )
-                                                    }
-                                                >
-                                                    Remove
-                                                </button>
-                                            )}
-                                    </li>
-                                ))}
-                            </ul>
-                            {user &&
-                                students.some(
-                                    (student) => student.id === user.id
-                                ) && (
-                                    <button
-                                        className={styles.selectStudent}
-                                        onClick={() =>
-                                            handleRemoveStudent(user.id)
-                                        }
-                                    >
-                                        Leave Class
-                                    </button>
-                                )}
-                            {user?.role === "student" &&
-                                !students.some(
-                                    (student) => student.id === user.id
-                                ) && (
-                                    <button
-                                        className={styles.selectStudent}
-                                        onClick={handleAddStudent}
-                                    >
-                                        Enroll
-                                    </button>
-                                )}
-                            {user?.role === "teacher" &&
-                                post?.user_id === user.id && (
-                                    <div className={styles.selectStudent}>
-                                        <select
-                                            value={selectedStudent}
-                                            onChange={(e) =>
-                                                setSelectedStudent(
-                                                    e.target.value
-                                                )
+                            <div className={styles.details}>
+                                <p>
+                                    <strong>Location:</strong> {post.location}
+                                </p>
+                                <p>
+                                    <strong>Maximum Students:</strong>{" "}
+                                    {post.maxCount}
+                                </p>
+                                <p>
+                                    <strong>First Class Date:</strong>{" "}
+                                    {new Date(
+                                        post.dateFirstClass
+                                    ).toLocaleDateString()}
+                                </p>
+                                <p>
+                                    <strong>Rate per hour:</strong> ${post.rate}
+                                </p>
+                            </div>
+                            <div className={styles.studentsList}>
+                                <h2>Students</h2>
+                                <ul>
+                                    {students.map((student) => (
+                                        <li
+                                            key={student.id}
+                                            className={styles.studentItem}
+                                        >
+                                            {student.first_name}{" "}
+                                            {student.last_name}
+                                            {user?.role === "teacher" &&
+                                                post?.user_id === user.id && (
+                                                    <button
+                                                        onClick={() =>
+                                                            handleRemoveStudent(
+                                                                student.id
+                                                            )
+                                                        }
+                                                        className={
+                                                            styles.removeButton
+                                                        }
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                )}
+                                        </li>
+                                    ))}
+                                </ul>
+                                {user &&
+                                    students.some(
+                                        (student) => student.id === user.id
+                                    ) && (
+                                        <button
+                                            className={styles.selectStudent}
+                                            onClick={() =>
+                                                handleRemoveStudent(user.id)
                                             }
                                         >
-                                            <option value="">
-                                                Select a student
-                                            </option>
-                                            {allUsers
-                                                .filter(
-                                                    (user) =>
-                                                        user.role ===
-                                                            "student" &&
-                                                        !students.some(
-                                                            (student) =>
-                                                                student.id ===
-                                                                user.id
-                                                        )
-                                                )
-                                                .map((student) => (
-                                                    <option
-                                                        key={student.id}
-                                                        value={student.id}
-                                                    >
-                                                        {student.first_name}{" "}
-                                                        {student.last_name}
-                                                    </option>
-                                                ))}
-                                        </select>
+                                            Leave Class
+                                        </button>
+                                    )}
+                                {user?.role === "student" &&
+                                    !students.some(
+                                        (student) => student.id === user.id
+                                    ) && (
                                         <button
                                             className={styles.selectStudent}
                                             onClick={handleAddStudent}
                                         >
-                                            Add Student
+                                            Enroll
                                         </button>
+                                    )}
+                                {user?.role === "teacher" &&
+                                    post?.user_id === user.id && (
+                                        <div className={styles.selectStudent}>
+                                            <select
+                                                className={
+                                                    styles.selectStudentDropdown
+                                                }
+                                                value={selectedStudent}
+                                                onChange={(e) =>
+                                                    setSelectedStudent(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            >
+                                                <option value="">
+                                                    Select a student
+                                                </option>
+                                                {allUsers
+                                                    .filter(
+                                                        (user) =>
+                                                            user.role ===
+                                                                "student" &&
+                                                            !students.some(
+                                                                (student) =>
+                                                                    student.id ===
+                                                                    user.id
+                                                            )
+                                                    )
+                                                    .map((student) => (
+                                                        <option
+                                                            key={student.id}
+                                                            value={student.id}
+                                                        >
+                                                            {student.first_name}{" "}
+                                                            {student.last_name}
+                                                        </option>
+                                                    ))}
+                                            </select>
+
+                                            <button
+                                                className={styles.addStudent}
+                                                onClick={handleAddStudent}
+                                            >
+                                                Add Student
+                                            </button>
+                                        </div>
+                                    )}
+                                {user?.role === "teacher" &&
+                                    post?.user_id === user.id && (
+                                        <button
+                                            className={styles.editButton}
+                                            onClick={handleEditClick}
+                                        >
+                                            Edit
+                                        </button>
+                                    )}
+                                {error && (
+                                    <div className={styles.errorMessage}>
+                                        {error}
                                     </div>
                                 )}
-                            {user?.role === "teacher" &&
-                                post?.user_id === user.id && (
-                                    <button
-                                        className={styles.editButton}
-                                        onClick={handleEditClick}
-                                    >
-                                        Edit
-                                    </button>
-                                )}
-                            {error && (
-                                <div className={styles.errorMessage}>
-                                    {error}
-                                </div>
-                            )}
+                            </div>
                         </div>
-                    </div>
-                </>
-            ) : (
-                <p className={styles.loading}>Loading...</p>
-            )}
-        </div>
+                    </>
+                ) : (
+                    <p className={styles.loading}>Loading...</p>
+                )}
+            </div>
+        </>
     );
 };
 

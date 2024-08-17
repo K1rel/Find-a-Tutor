@@ -4,19 +4,15 @@ import { useNavigate } from "react-router-dom";
 import styles from "../../css/users/Edit.module.css";
 
 const EditProfile = () => {
-    const {
-        user,
-        loading,
-        updateUser,
-        fetchUserData,
-        profile,
-        loggedUserProfile,
-    } = useUser();
+    const { user, loading, updateUser, profile, loggedUserProfile } = useUser();
     const [formData, setFormData] = useState({
         first_name: profile?.first_name || "",
         last_name: profile?.last_name || "",
         email: profile?.email || "",
         profile_picture: profile?.profile_picture || null,
+        availability: profile?.availability || "",
+        willing_to_travel: profile?.willing_to_travel || "",
+        languages: profile?.languages ? profile.languages.join(", ") : "", // Updated
     });
     const [file, setFile] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,12 +24,16 @@ const EditProfile = () => {
             if (isSubmitting) return;
             setIsSubmitting(true);
             try {
-                const updatedProfileData = { ...formData };
+                const updatedProfileData = {
+                    ...formData,
+                    languages: formData.languages
+                        .split(",")
+                        .map((lang) => lang.trim()),
+                };
                 if (file) {
                     updatedProfileData.profile_picture = file;
                 }
                 await updateUser(updatedProfileData);
-
                 navigate("/profile");
             } catch (error) {
                 console.error("Error updating profile:", error);
@@ -51,6 +51,11 @@ const EditProfile = () => {
                 last_name: profile.last_name,
                 email: profile.email,
                 profile_picture: profile.profile_picture,
+                availability: profile.teacher_profile?.availability || "",
+                willing_to_travel:
+                    profile.teacher_profile?.willing_to_travel || "",
+                languages: profile.teacher_profile?.languages || "",
+                role: profile.role,
             });
         }
     }, [profile]);
@@ -58,6 +63,7 @@ const EditProfile = () => {
     useEffect(() => {
         setFile(null);
     }, []);
+
     useEffect(() => {
         const loadUserProfile = async () => {
             try {
@@ -79,11 +85,10 @@ const EditProfile = () => {
     }
 
     const handleChange = (e) => {
-        const { name, value, files } = e.target;
-        if (name === "profile_picture") {
-            setFormData({ ...formData, profile_picture: files[0] });
+        if (e.target.name === "profile_picture") {
+            setFormData({ ...formData, profile_picture: e.target.files[0] });
         } else {
-            setFormData({ ...formData, [name]: value });
+            setFormData({ ...formData, [e.target.name]: e.target.value });
         }
     };
 
@@ -143,6 +148,48 @@ const EditProfile = () => {
                         className={styles.fileInput}
                     />
                 </label>
+
+                {formData.role === "teacher" && (
+                    <>
+                        <label className={styles.label}>
+                            Availability:
+                            <select
+                                name="availability"
+                                value={formData.availability}
+                                onChange={handleChange}
+                                className={styles.selectField}
+                            >
+                                <option value="">Select Availability</option>
+                                <option value="online">Online</option>
+                                <option value="in_person">In Person</option>
+                                <option value="both">Both</option>
+                            </select>
+                        </label>
+                        <label className={styles.label}>
+                            Willing to Travel (in km):
+                            <input
+                                type="number"
+                                name="willing_to_travel"
+                                value={formData.willing_to_travel}
+                                onChange={handleChange}
+                                className={styles.inputField}
+                                placeholder="Willing to Travel"
+                            />
+                        </label>
+                        <label className={styles.label}>
+                            Languages Spoken:
+                            <input
+                                type="text"
+                                name="languages"
+                                value={formData.languages}
+                                onChange={handleChange}
+                                className={styles.inputField}
+                                placeholder="Languages Spoken"
+                            />
+                        </label>
+                    </>
+                )}
+
                 <button
                     type="submit"
                     className={styles.submitButton}

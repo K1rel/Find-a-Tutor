@@ -6,13 +6,16 @@ import api from "../axiosConfig";
 export const registerUser = async (formData) => {
     const data = new FormData();
 
-    // Append form fields to FormData object
     for (const [key, value] of Object.entries(formData)) {
-        if (value) {
+        if (Array.isArray(value)) {
+            data.append(key, JSON.stringify(value));
+        } else {
             data.append(key, value);
         }
     }
-
+    for (const [key, value] of data.entries()) {
+        console.log(`${key}: ${value}`);
+    }
     try {
         const response = await api.post("/register", data, {
             headers: {
@@ -82,6 +85,12 @@ export const findUser = async (id) => {
 
 export const updateUserProfile = async (profileData) => {
     const formData = new FormData();
+
+    Object.keys(profileData).forEach((key) => {
+        if (profileData[key] !== undefined && profileData[key] !== null) {
+            formData.append(key, profileData[key]);
+        }
+    });
 
     try {
         const response = await api.post("/update-profile", formData, {

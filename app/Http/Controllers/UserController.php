@@ -45,43 +45,55 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-        Log::info('Request Data:', $request->all());
+        Log::info('aaaaa:', $request->all());
+    
         $validated = $request->validate([
             'first_name' => 'sometimes|required|string|max:255',
-    'last_name' => 'sometimes|required|string|max:255',
-    'email' => [
-        'sometimes',
-        'required',
-        'email',
-        'max:255',
-        Rule::unique('users')->ignore($user->id),
-    ],
-
+            'last_name' => 'sometimes|required|string|max:255',
+            'email' => [
+                'sometimes',
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:10000',
+            'availability' => 'nullable|in:online,in_person,both',
+            'willing_to_travel' => 'nullable|numeric|min:0',
+         
+            'languages' => 'nullable|array', // Updated to array
+            'languages.*' => 'string|max:255' 
         ]);
-     
-        $profilePicturePath = $user->profile_picture; // Default to current picture path
-
-        if ($request->hasFile('profile_picture')) {
-            // Validate profile_picture only if it's present
-            $request->validate([
-                'profile_picture' => 'required|image|mimes:jpg,jpeg,png|max:10000',
-            ]);
     
-            // Delete old profile picture if it exists
+        
+        $profilePicturePath = $user->profile_picture;
+    
+        if ($request->hasFile('profile_picture')) {
+            
             if ($user->profile_picture) {
                 Storage::disk('public')->delete($user->profile_picture);
             }
     
-            // Store new profile picture
             $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
         }
-       
+    
         $user->first_name = $request->first_name ?? $user->first_name;
         $user->last_name = $request->last_name ?? $user->last_name;
         $user->email = $request->email ?? $user->email;
         $user->profile_picture = $profilePicturePath;
         $user->save();
+        Log::info('User updated:', ['user' => $user]);
         
+        if ($user->role === 'teacher') {
+            $teacherProfile = $user->teacherProfile; 
+    
+            $teacherProfile->update([
+                'availability' => $validated['availability'] ?? $teacherProfile->availability,
+                'willing_to_travel' => $validated['willing_to_travel'] ?? $teacherProfile->willing_to_travel,
+                'languages' => $validated['languages'] ? json_encode($validated['languages']) : $teacherProfile->languages,
+            ]);
+            Log::info('Teacher profile updated:', ['teacherProfile' => $teacherProfile]);
+        }
     }
 
     public function destroy($id)

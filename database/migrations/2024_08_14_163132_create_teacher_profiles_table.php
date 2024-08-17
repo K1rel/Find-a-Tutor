@@ -11,9 +11,10 @@ return new class extends Migration
         Schema::create('teacher_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->integer('rate')->nullable(); 
-            $table->enum('availability', ['online', 'in-person', 'both']);
+           
+            $table->enum('availability', ['online', 'in_person', 'both']);
             $table->integer('willing_to_travel')->nullable(); 
+            $table->json('languages')->nullable(); 
             $table->timestamps();
         });
 
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->text('review');
+            $table->unsignedTinyInteger('stars');
             $table->timestamps();
 
             $table->unique(['teacher_id', 'student_id']);

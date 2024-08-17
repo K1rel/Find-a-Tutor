@@ -1,0 +1,155 @@
+.reviewPageContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: linear-gradient(to right, #f9f9f9, #eeeeee);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.averageRating {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #7e8ef1; /* Secondary color for background */
+    color: #fff;
+    text-align: center;
+}
+
+.averageRatingValue {
+    font-size: 2rem; /* Larger font size for emphasis */
+    font-weight: bold;
+}
+
+.reviewForm {
+    margin-bottom: 40px;
+    background: #eeee; /* Background color for the form section */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.reviewTextArea {
+    width: 95%;
+    margin-top: 10px;
+    height: 120px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    resize: vertical; /* Allows vertical resizing only */
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reviewTextArea:focus {
+    border-color: #615efc; /* Primary color */
+    outline: none;
+    box-shadow: 0 0 8px rgba(97, 94, 252, 0.3); /* Subtle glow effect */
+}
+
+.reviewTextArea::placeholder {
+    color: #7e8ef1; /* Secondary color for placeholder text */
+    opacity: 0.8;
+    font-style: italic;
+}
+.submitButton {
+    margin-top: 10px;
+    background: linear-gradient(135deg, #615efc, #7e8ef1);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.submitButton:hover {
+    background: linear-gradient(135deg, #7e8ef1, #615efc);
+    transform: scale(1.05);
+}
+
+.submitButton:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(97, 94, 252, 0.5);
+}
+
+.error {
+    color: #d9534f; /* Darker red for better visibility */
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Review.module.css */
+
+.reviewsList {
+    padding: 20px;
+}
+
+.reviewItem {
+    background: #eeee; /* Adjust to match your preferred color */
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.reviewMeta {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.reviewRating {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.reviewContent {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.reviewText {
+    font-size: 1em;
+}
+
+.reviewHeader {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.studentName {
+    font-size: 0.9em;
+    color: #333;
+    font-weight: bold;
+}
+
+.noReviews {
+    color: #888;
+    font-style: italic;
+}
+
+.goBackButton {
+    background-color: #7e8ef1; /* Secondary color */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+    display: inline-block;
+    text-align: center;
+}
+
+.goBackButton:hover {
+    background-color: #615efc; /* Primary color on hover */
+    transition: background-color 0.3s ease;
+}

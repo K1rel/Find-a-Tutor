@@ -48,5 +48,10 @@ Route::apiResource('users', UserController::class);
 
 
 //teachers
-Route::get('/teacher-profiles/{id}', [TeacherProfileController::class, 'show']);
-Route::post('/reviews', [ReviewController::class, 'store']);
+Route::middleware('auth:api')->group(function () {
+    Route::get('/teacher-profiles/{id}', [TeacherProfileController::class, 'show']);
+    Route::post('/teachers/{teacherId}/reviews', [ReviewController::class, 'store']);
+    Route::get('/teachers/{teacher}/reviews', [ReviewController::class, 'index']);
+    Route::get('/teachers/{teacherId}/reviews/all', [ReviewController::class, 'getAllReviewsForTeacher']);
+});
+

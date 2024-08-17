@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -15,6 +16,8 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
+       
+     
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -22,41 +25,44 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:student,teacher',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:10000',
-            'rate' => 'nullable|integer|min:0', 
             'availability' => 'nullable|string',
-            'willing_to_travel' => 'nullable|integer|min:0'
+            'willing_to_travel' => 'nullable|integer|min:0',
+            'languages' => 'nullable|json', // Expect JSON
         ]);
+       
 
         if ($request->hasFile('profile_picture')) {
             $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
         }
         
         $validated['password'] = Hash::make($validated['password']);
-        $validated['api_token'] = Str::random(60); // Generate a random token
-
+      
+    
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'role' => $request->role,
-            'profile_picture' => $profilePicturePath, // Save file path
+            'profile_picture' => $profilePicturePath ?? null,
         ]);
-
+        $token = Str::random(60);
+        $user->api_token = $token;
         if ($validated['role'] === 'teacher') {
             TeacherProfile::create([
                 'user_id' => $user->id,
-                'rate' => $validated['rate'] ?? null,
-                'availability' => $request->input('availability') ?? null,
-                'willing_to_travel' => $request->input('willing_to_travel') ?? null,
+                'availability' => $validated['availability'] ?? null,
+                'willing_to_travel' => $validated['willing_to_travel'] ?? null,
+                'languages' => $validated['languages'],
             ]);
         }
-
+    
         return response()->json([
             'message' => 'User registered successfully',
             'user' => $user,
         ]);
     }
+    
 
     public function login(Request $request)
     {
@@ -91,7 +97,13 @@ class AuthController extends Controller
     public function currentUser(Request $request)
     {
      
-        return response()->json(['user' => $request->user()]);
+        $user = $request->user();
+
+    if ($user->role === 'teacher') {
+        $user->load('teacherProfile'); // Eager load the teacher profile relationship
+    }
+
+    return response()->json(['user' => $user]);
     }
     
 }

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { registerUser } from "../../services/userService";
 import { useUser } from "../../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 import styles from "../../css/users/Register.module.css";
+import { languages } from "../../data/languages";
 
 const Register = () => {
     const { register } = useUser();
@@ -14,18 +14,31 @@ const Register = () => {
         password_confirmation: "",
         role: "student",
         profile_picture: null,
-        rate: "", // New field for teacher rate
-        availability: "", // New field for teacher availability
-        willing_to_travel: "", // New field for teacher travel distance
+        availability: "",
+        willing_to_travel: "",
+        languages: [],
     });
-    const [showTeacherFields, setShowTeacherFields] = useState(false); // State to show/hide teacher fields
+
+    const [showTeacherFields, setShowTeacherFields] = useState(false);
+    const [errorMessages, setErrorMessages] = useState({});
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        if (e.target.name === "profile_picture") {
+        const { name, value, options } = e.target;
+
+        if (name === "languages") {
+            const selectedLanguages = Array.from(options)
+                .filter((option) => option.selected)
+                .map((option) => option.value);
+
+            setFormData({
+                ...formData,
+                [name]: selectedLanguages,
+            });
+        } else if (name === "profile_picture") {
             setFormData({ ...formData, profile_picture: e.target.files[0] });
         } else {
-            setFormData({ ...formData, [e.target.name]: e.target.value });
+            setFormData({ ...formData, [name]: value });
         }
     };
 
@@ -37,13 +50,19 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
+            console.log(formData);
             await register(formData);
             alert("Registration successful!");
             navigate("/");
         } catch (error) {
             console.error("Registration error:", error);
-            alert("Registration failed.");
+            if (error.response && error.response.data.errors) {
+                setErrorMessages(error.response.data.errors);
+            } else {
+                alert("Registration failed.");
+            }
         }
     };
 
@@ -112,14 +131,6 @@ const Register = () => {
 
             {showTeacherFields && (
                 <>
-                    <input
-                        type="number"
-                        name="rate"
-                        value={formData.rate}
-                        onChange={handleChange}
-                        placeholder="Rate (e.g., 30)"
-                        className={styles.inputField}
-                    />
                     <select
                         name="availability"
                         value={formData.availability}
@@ -139,12 +150,41 @@ const Register = () => {
                         placeholder="Willing to Travel (in km)"
                         className={styles.inputField}
                     />
+                    <select
+                        name="languages"
+                        value={formData.languages}
+                        onChange={handleChange}
+                        multiple
+                        className={styles.selectField}
+                    >
+                        {languages.map((language) => (
+                            <option key={language} value={language}>
+                                {language}
+                            </option>
+                        ))}
+                    </select>
                 </>
             )}
 
             <button type="submit" className={styles.submitButton}>
                 Register
             </button>
+
+            {Object.keys(errorMessages).length > 0 && (
+                <div className={styles.errorPopup}>
+                    <h3>Registration Error</h3>
+                    <ul>
+                        {Object.entries(errorMessages).map(
+                            ([field, messages]) => (
+                                <li key={field}>
+                                    <strong>{field}:</strong>{" "}
+                                    {messages.join(" ")}
+                                </li>
+                            )
+                        )}
+                    </ul>
+                </div>
+            )}
         </form>
     );
 };

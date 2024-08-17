@@ -11,12 +11,14 @@ const PostForm = ({ postId, onSuccess }) => {
         location: "",
         dateFirstClass: "",
         tag_id: "",
-        maxCount: 1,
+        maxCount: 1, // Default to 1 student
+        rate: "", // New field for rate
     });
     const [tags, setTags] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
+
     useEffect(() => {
         if (postId) {
             const fetchPost = async () => {
@@ -28,7 +30,8 @@ const PostForm = ({ postId, onSuccess }) => {
                         location: postData.location,
                         dateFirstClass: postData.dateFirstClass,
                         tag_id: postData.tag_id,
-                        maxCount: postData.maxCount,
+                        maxCount: postData.maxCount, // Handle maxCount field
+                        rate: postData.rate || "", // Handle rate field
                     });
                     setIsEditing(true);
                 } catch (error) {
@@ -64,23 +67,29 @@ const PostForm = ({ postId, onSuccess }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            let newPost;
             if (isEditing) {
-                await updatePost(postId, post);
+                newPost = await updatePost(postId, post);
             } else {
-                await createPost(post);
+                newPost = await createPost(post);
             }
             onSuccess();
-            navigate(`/posts/${postId}`);
+            console.log(newPost);
+            navigate(`/posts/${newPost.id}`);
         } catch (error) {
             console.error("Error saving post:", error);
         }
     };
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
+
     return (
         <div className={styles.formContainer}>
-            <h1>{isEditing ? "Edit Post" : "Create Post"}</h1>
+            <h1 className={styles.formTitle}>
+                {isEditing ? "Edit Post" : "Create Post"}
+            </h1>
             <form onSubmit={handleSubmit}>
                 <label className={styles.label}>
                     Title:
@@ -100,7 +109,7 @@ const PostForm = ({ postId, onSuccess }) => {
                         value={post.description}
                         onChange={handleChange}
                         required
-                        className={styles.inputField}
+                        className={styles.textAreaField}
                     />
                 </label>
                 <label className={styles.label}>
@@ -132,7 +141,7 @@ const PostForm = ({ postId, onSuccess }) => {
                         value={post.tag_id}
                         onChange={handleChange}
                         required
-                        className={styles.inputField}
+                        className={styles.selectField}
                     >
                         {tags.map((tag) => (
                             <option key={tag.id} value={tag.id}>
@@ -142,13 +151,24 @@ const PostForm = ({ postId, onSuccess }) => {
                     </select>
                 </label>
                 <label className={styles.label}>
-                    Max Count:
+                    Max Students:
                     <input
                         type="number"
                         name="maxCount"
                         value={post.maxCount}
                         onChange={handleChange}
                         required
+                        className={styles.inputField}
+                    />
+                </label>
+                <label className={styles.label}>
+                    Rate:
+                    <input
+                        type="number"
+                        name="rate"
+                        value={post.rate}
+                        onChange={handleChange}
+                        placeholder="Rate (e.g., 30)"
                         className={styles.inputField}
                     />
                 </label>

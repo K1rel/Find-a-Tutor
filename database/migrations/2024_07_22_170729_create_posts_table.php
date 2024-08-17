@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->integer('maxCount');
+            $table->integer('rate')->nullable();
             $table->date('dateFirstClass');
+            
             $table->timestamps();
         });
         Schema::create('post_student', function (Blueprint $table) {
