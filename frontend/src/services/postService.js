@@ -72,3 +72,20 @@ export const removeStudentFromPost = async (postId, studentId) => {
         throw error;
     }
 };
+
+export const getUserPosts = async () => {
+    const response = await api.get("/user-posts");
+    return response.data;
+};
+
+export const getPostsQuery = async (query = "") => {
+    try {
+        const response = await api.get(`/search/posts`, {
+            params: { query },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching posts:", error);
+        throw new Error("Network response was not ok.");
+    }
+};

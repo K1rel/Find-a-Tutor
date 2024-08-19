@@ -1,0 +1,83 @@
+.reviewPageContainer {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reviewPageContainer h1 {
+    font-size: 24px;
+    color: #615efc;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.reviewsList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.reviewItem {
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.reviewItem:hover {
+    background-color: #e8e8e8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reviewHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.studentName {
+    font-size: 16px;
+    color: #333333;
+}
+
+.reviewContent {
+    margin-bottom: 10px;
+}
+
+.reviewText {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555555;
+}
+
+.reviewMeta {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.reviewRating {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.error {
+    color: #ff0000;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.noReviews {
+    font-size: 16px;
+    text-align: center;
+    color: #666666;
+}

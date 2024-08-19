@@ -18,6 +18,8 @@ import Profile from "./components/User/Profile";
 import Review from "./components/Teacher/Review";
 import { UserProvider } from "./Context/UserContext";
 import TeacherProfile from "./components/Teacher/TeacherProfile";
+import MyReviews from "./components/User/MyReviews";
+import UserPosts from "./components/User/UserPosts";
 
 ReactDOM.render(
     <Router>
@@ -42,6 +44,8 @@ ReactDOM.render(
                         element={<TeacherProfile />}
                     />
                     <Route path="/write-review/:id" element={<Review />} />
+                    <Route path="/my-reviews" element={<MyReviews />} />
+                    <Route path="/my-posts" element={<UserPosts />} />
                 </Routes>
             </Layout>
         </UserProvider>

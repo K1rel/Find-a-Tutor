@@ -1,0 +1,94 @@
+/* Home.module.css */
+
+.homeContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #e0e4cc;
+}
+
+.searchForm {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px 0;
+    position: relative; /* Allows absolute positioning of searchResults */
+}
+
+.searchBarContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.searchInput {
+    flex-grow: 1; /* Ensures input takes up all available space */
+    padding: 15px;
+    font-size: 18px;
+    border: 2px solid #ccc;
+    border-radius: 8px 0 0 8px; /* Rounded corners on the left */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.searchInput:focus {
+    border-color: #6b6bff;
+}
+
+.searchButton {
+    padding: 15px 20px;
+    font-size: 18px;
+    border: 2px solid #ccc;
+    border-left: none; /* Remove border between button and input */
+    border-radius: 0 8px 8px 0; /* Rounded corners on the right */
+    background-color: #6b6bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.searchButton:hover {
+    background-color: #5959e0;
+}
+
+.searchResults {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 2px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: calc(100% - 100px);
+}
+
+.searchResultItem {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.searchResultItem:hover {
+    background-color: #f0f0f0;
+}
+
+.searchResultItem a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.searchResultItem a:hover {
+    color: #6b6bff;
+}

@@ -4,6 +4,7 @@ import { getTeacherReviews, submitReview } from "../../services/reviewService";
 import StarRating from "./StarRating";
 import styles from "../../css/teachers/Review.module.css";
 import { useUser } from "../../Context/UserContext";
+import LoadingSpinner from "../Basic/LoadingSpinner";
 
 const ReviewPage = () => {
     const { id } = useParams();
@@ -20,23 +21,26 @@ const ReviewPage = () => {
         const fetchReviews = async () => {
             try {
                 const data = await getTeacherReviews(id);
-                console.log(data);
+
                 setReviews(data.reviews);
 
-                // Check if the current user has already reviewed this teacher
-                const userReview = data.reviews.find(
-                    (review) => review.student.id === user.id
-                );
-                if (userReview) {
-                    setHasReviewed(true);
+                if (user && user.id) {
+                    const userReview = data.reviews.find(
+                        (review) => review.student.id === user.id
+                    );
+                    if (userReview) {
+                        setHasReviewed(true);
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching reviews:", error);
             }
         };
 
-        fetchReviews();
-    }, [id, user.id]);
+        if (user && user.id) {
+            fetchReviews();
+        }
+    }, [id, user]);
 
     const handleRatingChange = (rating) => {
         setRating(rating);
@@ -52,7 +56,7 @@ const ReviewPage = () => {
             setReviews([
                 ...reviews,
                 {
-                    rating,
+                    stars: rating,
                     review: reviewText,
                     student: {
                         id: user.id,
@@ -72,6 +76,22 @@ const ReviewPage = () => {
         }
     };
 
+    const calculateAverageRating = (reviews) => {
+        if (reviews.length === 0) return 0;
+        const totalStars = reviews.reduce(
+            (acc, review) => acc + review.stars,
+            0
+        );
+        return (totalStars / reviews.length).toFixed(1); // Round to 1 decimal place
+    };
+
+    const averageRating = calculateAverageRating(reviews);
+    if (!user) {
+        return <LoadingSpinner />; // Or some other loading state
+    }
+    if (!reviews.length > 0) {
+        return <LoadingSpinner />;
+    }
     return (
         <div className={styles.reviewPageContainer}>
             <button
@@ -80,7 +100,13 @@ const ReviewPage = () => {
             >
                 Go Back
             </button>
-            {/* Display average rating here */}
+            <div className={styles.averageRating}>
+                <h2>Average Rating</h2>
+                <p className={styles.averageRatingValue}>
+                    {averageRating} / 10
+                </p>
+            </div>
+
             {!hasReviewed && (
                 <div className={styles.reviewForm}>
                     <h2>Leave a Review</h2>

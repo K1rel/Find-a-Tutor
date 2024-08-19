@@ -12,3 +12,8 @@ export const submitReview = async (teacherId, reviewData) => {
     );
     return response.data;
 };
+
+export const getMyReviews = async () => {
+    const response = await api.get("/my-reviews");
+    return response.data;
+};

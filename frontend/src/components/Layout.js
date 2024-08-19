@@ -43,10 +43,40 @@ const Layout = ({ children }) => {
                                 </li>
                             )}
                             {user?.role && (
-                                <li>
+                                <li className="dropdown">
                                     <Link to="/profile" className="nav-link">
-                                        Profile
+                                        <span>Profile</span>
                                     </Link>
+                                    <ul className="dropdown-content">
+                                        <li>
+                                            <Link
+                                                to={
+                                                    user.role === "student"
+                                                        ? "/my-reviews"
+                                                        : "/my-reviews"
+                                                }
+                                                className="nav-link"
+                                            >
+                                                {user.role === "student"
+                                                    ? "My Reviews"
+                                                    : "Received Reviews"}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link
+                                                to={
+                                                    user.role === "student"
+                                                        ? "/enrolled-posts"
+                                                        : "/my-posts"
+                                                }
+                                                className="nav-link"
+                                            >
+                                                {user.role === "student"
+                                                    ? "Enrolled Posts"
+                                                    : "My Posts"}
+                                            </Link>
+                                        </li>
+                                    </ul>
                                 </li>
                             )}
                         </>

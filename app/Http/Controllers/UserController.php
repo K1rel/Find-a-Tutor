@@ -57,7 +57,7 @@ class UserController extends Controller
                 'max:255',
                 Rule::unique('users')->ignore($user->id),
             ],
-            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:10000',
+           
             'availability' => 'nullable|in:online,in_person,both',
             'willing_to_travel' => 'nullable|numeric|min:0',
          
@@ -69,7 +69,9 @@ class UserController extends Controller
         $profilePicturePath = $user->profile_picture;
     
         if ($request->hasFile('profile_picture')) {
-            
+            $validated = $request->validate([
+                'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:10000',
+            ]);
             if ($user->profile_picture) {
                 Storage::disk('public')->delete($user->profile_picture);
             }

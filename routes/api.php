@@ -55,3 +55,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/teachers/{teacherId}/reviews/all', [ReviewController::class, 'getAllReviewsForTeacher']);
 });
 
+//myStuff 
+
+Route::middleware('auth:api')->get('/my-reviews', [ReviewController::class, 'getMyReviews']);
+Route::middleware('auth:api')->get('/user-posts', [PostController::class, 'getUserPosts']);
+
+//search
+
+Route::middleware('auth:api')->get('/search/posts', [PostController::class, 'searchPosts']);

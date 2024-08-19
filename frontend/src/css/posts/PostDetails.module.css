@@ -76,7 +76,7 @@
 .addStudent {
     margin-top: 15px;
     padding: 10px 20px;
-    background-color: #744b8bcb; /* Tomato color */
+    background-color: #744b8bcb;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -85,12 +85,12 @@
 }
 
 .addStudent:hover {
-    background-color: #afb3ff; /* OrangeRed color */
+    background-color: #afb3ff;
     transform: scale(1.05);
 }
 
 .addStudent:active {
-    background-color: #7e8ef1; /* Red color */
+    background-color: #7e8ef1;
     transform: scale(0.95);
 }
 
@@ -173,15 +173,15 @@
 }
 
 .removeButton:hover {
-    background-color: #c0392b; /* Darker red on hover */
+    background-color: #c0392b;
 }
 
 .removeButton:focus {
-    outline: none; /* Remove default focus outline */
+    outline: none;
 }
 
 .goBackButton {
-    background-color: #7e8ef1; /* Secondary color */
+    background-color: #615efc;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -194,6 +194,6 @@
 }
 
 .goBackButton:hover {
-    background-color: #615efc; /* Primary color on hover */
+    background-color: #4a4ad1;
     transition: background-color 0.3s ease;
 }

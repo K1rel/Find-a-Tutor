@@ -15,14 +15,14 @@ class ReviewController extends Controller
     {
         $teacher = User::findOrFail($teacherId);
         $reviews = Review::where('teacher_id', $teacherId)->with('student')->get();
-
+         Log::info($reviews);
         return response()->json([
             'teacher' => $teacher,
             'reviews' => $reviews,
         ]);
     }
 
-    // Store a new review
+    
     public function store(Request $request, $teacherId)
     {
         $request->validate([
@@ -61,7 +61,7 @@ class ReviewController extends Controller
         ], 201);
     }
 
-    // Update an existing review
+   
     public function update(Request $request, $teacherId)
     {
         $request->validate([
@@ -86,7 +86,7 @@ class ReviewController extends Controller
         ], 200);
     }
 
-    // Delete a review
+   
     public function destroy($teacherId)
     {
         $studentId = Auth::id();
@@ -103,7 +103,7 @@ class ReviewController extends Controller
     }
     public function getAllReviewsForTeacher($teacherId)
     {
-        // Check if the teacher exists
+       
         $teacher = User::find($teacherId);
 
         if (!$teacher) {
@@ -119,4 +119,20 @@ class ReviewController extends Controller
             'reviews' => $reviews,
         ], 200);
     }
+    public function getMyReviews()
+{
+    $user = Auth::user();
+
+    if ($user->role === 'student') {
+        
+        $reviews = Review::where('student_id', $user->id)->with('teacher')->get();
+    } elseif ($user->role === 'teacher') {
+        
+        $reviews = Review::where('teacher_id', $user->id)->with('student')->get();
+    } else {
+        return response()->json(['message' => 'Unauthorized'], 403);
+    }
+
+    return response()->json(['reviews' => $reviews]);
+}
 }

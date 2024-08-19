@@ -59,4 +59,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class, 'teacher_id');
     }
+    public function enrolledPosts()
+{
+    return $this->belongsToMany(Post::class, 'enrollments');
+}
 }

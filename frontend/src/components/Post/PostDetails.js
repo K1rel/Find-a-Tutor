@@ -7,6 +7,7 @@ import {
 } from "../../services/postService";
 import { useUser } from "../../Context/UserContext";
 import styles from "../../css/posts/PostDetails.module.css";
+import LoadingSpinner from "../Basic/LoadingSpinner";
 
 const PostDetail = () => {
     const { id } = useParams();
@@ -70,7 +71,7 @@ const PostDetail = () => {
                 className={styles.goBackButton}
                 onClick={() => navigate(-1)}
             >
-                Go Back
+                &larr; Go Back
             </button>
             <div className={styles.container}>
                 {post ? (
@@ -85,7 +86,7 @@ const PostDetail = () => {
                                 {post.user.first_name} {post.user.last_name}
                             </p>
                             <Link
-                                to={`/teacher-profile/${post.user.id}`}
+                                to={`/teacher-profile/${post.user.teacher_profile.id}`}
                                 className={styles.profileLink}
                             >
                                 View Professor's Profile
@@ -233,7 +234,7 @@ const PostDetail = () => {
                         </div>
                     </>
                 ) : (
-                    <p className={styles.loading}>Loading...</p>
+                    <LoadingSpinner />
                 )}
             </div>
         </>

@@ -18,7 +18,7 @@ class PostController extends Controller
 
     public function show($id)
     {
-        return Post::with('tag', 'user', 'students')->findOrFail($id);
+        return Post::with('tag', 'user','user.teacherProfile', 'students')->findOrFail($id);
     }
 
     // public function store(Request $request)
@@ -145,4 +145,38 @@ class PostController extends Controller
         return response()->json(['message' => 'Unauthorized'], 403);
      
     }
+    public function getUserPosts()
+    {
+        $user = Auth::user();
+
+        if ($user->role === 'teacher') {
+           
+            $posts = Post::where('user_id', $user->id)->get();
+        } elseif ($user->role === 'student') {
+           
+            $posts = Post::whereHas('students', function ($query) use ($user) {
+                $query->where('student_id', $user->id);
+            })->get();
+        } else {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        return response()->json($posts);
+    }
+    public function searchPosts(Request $request)
+{
+    $query = $request->input('query');
+
+    if (empty($query)) {
+        return response()->json([]);
+    }
+
+    $posts = Post::where('title', 'ILIKE', "%$query%")
+        ->orWhere('description', 'ILIKE', "%$query%")
+        ->with('user', 'tag') 
+        ->get();
+
+    return response()->json($posts);
+}
+
 }
