@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,12 +47,50 @@ class PostController extends Controller
             Log::error('User is null');
             return response()->json(['error' => 'User not authenticated'], 401);
         }
+    
         if ($user->role !== 'teacher') {
             Log::error('User is not a teacher');
             return response()->json(['error' => 'Unauthorized: Only teachers can create posts'], 403);
         }
+    
+        // Validate incoming request
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'location' => 'required|string',
+            'dateFirstClass' => 'required|date',
+            'tag_name' => 'required|string',
+            'education_level' => 'required|string',
+            'maxCount' => 'required|integer|min:1',
+            'rate' => 'required|integer',
+        ]);
+    
         try {
-            $post = $user->posts()->create($request->all());
+            // Check if the tag exists
+            $tag = Tag::where('name', $validatedData['tag_name'])
+                      ->where('education_level', $validatedData['education_level'])
+                      ->first();
+    
+            // If the tag doesn't exist, create it
+            if (!$tag) {
+                $tag = Tag::create([
+                    'name' => $validatedData['tag_name'],
+                    'education_level' => $validatedData['education_level'],
+                ]);
+            }
+            $post = Post::create([
+                'title' => $validatedData['title'],
+                'description' => $validatedData['description'],
+                'location' => $validatedData['location'],
+                'dateFirstClass' => $validatedData['dateFirstClass'],
+                'maxCount' => $validatedData['maxCount'],
+                'rate' => $validatedData['rate'],
+                'tag_id' => $tag->id, // Set the tag_id
+                'user_id' => auth()->id(), // Assuming you are using authentication
+            ]);
+            // Create the post with the tag_id
+        
+    
             return response()->json($post, 201);
         } catch (\Exception $e) {
             Log::error('Error creating post: ' . $e->getMessage());
@@ -178,5 +217,6 @@ class PostController extends Controller
 
     return response()->json($posts);
 }
+
 
 }

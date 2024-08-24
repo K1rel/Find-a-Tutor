@@ -57,3 +57,7 @@
     font-style: italic;
     color: #888888;
 }
+
+.postLink {
+    text-decoration: none;
+}

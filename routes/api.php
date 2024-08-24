@@ -32,6 +32,11 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('/update-profile', [UserController::class, 'update'])->middleware('auth:api');
 Route::get('/users/{id}', [UserController::class, 'show']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+Route::post('/password/reset', [UserController::class, 'sendPasswordResetLink']);
+
+
+Route::post('/password/resetUser', [UserController::class, 'resetPassword'])->name('password.reset');
+
 
 
 //contact

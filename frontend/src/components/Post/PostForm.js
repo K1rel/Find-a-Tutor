@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPost, updatePost, getPost } from "../../services/postService";
 import { getTags } from "../../services/tagService";
+import LoadingSpinner from "../Basic/LoadingSpinner";
 import styles from "../../css/posts/PostForm.module.css";
 
 const PostForm = ({ postId, onSuccess }) => {
@@ -10,7 +11,8 @@ const PostForm = ({ postId, onSuccess }) => {
         description: "",
         location: "",
         dateFirstClass: "",
-        tag_id: "",
+        tag_name: "",
+        education_level: "",
         maxCount: 1, // Default to 1 student
         rate: "", // New field for rate
     });
@@ -29,20 +31,21 @@ const PostForm = ({ postId, onSuccess }) => {
                         description: postData.description,
                         location: postData.location,
                         dateFirstClass: postData.dateFirstClass,
-                        tag_id: postData.tag_id,
-                        maxCount: postData.maxCount, // Handle maxCount field
-                        rate: postData.rate || "", // Handle rate field
+                        tag_name: postData.tag_name,
+                        education_level: postData.education_level,
+                        maxCount: postData.maxCount,
+                        rate: postData.rate || "",
                     });
                     setIsEditing(true);
                 } catch (error) {
                     console.error("Error fetching post data:", error);
                 } finally {
-                    setIsLoading(false); // Set loading to false once data is fetched
+                    setIsLoading(false);
                 }
             };
             fetchPost();
         } else {
-            setIsLoading(false); // No postId means no post data loading required
+            setIsLoading(false);
         }
 
         const fetchTags = async () => {
@@ -56,6 +59,20 @@ const PostForm = ({ postId, onSuccess }) => {
 
         fetchTags();
     }, [postId]);
+
+    const handleTagNameChange = (e) => {
+        setPost({
+            ...post,
+            tag_name: e.target.value,
+        });
+    };
+
+    const handleEducationLevelChange = (e) => {
+        setPost({
+            ...post,
+            education_level: e.target.value,
+        });
+    };
 
     const handleChange = (e) => {
         setPost({
@@ -74,7 +91,6 @@ const PostForm = ({ postId, onSuccess }) => {
                 newPost = await createPost(post);
             }
             onSuccess();
-            console.log(newPost);
             navigate(`/posts/${newPost.id}`);
         } catch (error) {
             console.error("Error saving post:", error);
@@ -82,7 +98,7 @@ const PostForm = ({ postId, onSuccess }) => {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner />;
     }
 
     return (
@@ -135,17 +151,39 @@ const PostForm = ({ postId, onSuccess }) => {
                     />
                 </label>
                 <label className={styles.label}>
-                    Tag:
+                    Tag Name:
                     <select
-                        name="tag_id"
-                        value={post.tag_id}
-                        onChange={handleChange}
+                        name="tag_name"
+                        value={post.tag_name}
+                        onChange={handleTagNameChange}
                         required
                         className={styles.selectField}
                     >
-                        {tags.map((tag) => (
-                            <option key={tag.id} value={tag.id}>
-                                {tag.name + " | " + tag.education_level}
+                        <option value="">Select Tag Name</option>
+                        {[...new Set(tags.map((tag) => tag.name))].map(
+                            (name, index) => (
+                                <option key={index} value={name}>
+                                    {name}
+                                </option>
+                            )
+                        )}
+                    </select>
+                </label>
+                <label className={styles.label}>
+                    Education Level:
+                    <select
+                        name="education_level"
+                        value={post.education_level}
+                        onChange={handleEducationLevelChange}
+                        required
+                        className={styles.selectField}
+                    >
+                        <option value="">Select Education Level</option>
+                        {[
+                            ...new Set(tags.map((tag) => tag.education_level)),
+                        ].map((level, index) => (
+                            <option key={index} value={level}>
+                                {level}
                             </option>
                         ))}
                     </select>

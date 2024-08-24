@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useUser } from "../../Context/UserContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import styles from "../../css/users/Login.module.css";
 
 const Login = () => {
@@ -49,6 +49,9 @@ const Login = () => {
             <button type="submit" className={styles.button}>
                 Login
             </button>
+            <Link to="/forgot-password" className={styles.forgotPasswordLink}>
+                Forgot Password?
+            </Link>
         </form>
     );
 };

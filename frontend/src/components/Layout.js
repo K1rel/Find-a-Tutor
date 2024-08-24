@@ -50,11 +50,7 @@ const Layout = ({ children }) => {
                                     <ul className="dropdown-content">
                                         <li>
                                             <Link
-                                                to={
-                                                    user.role === "student"
-                                                        ? "/my-reviews"
-                                                        : "/my-reviews"
-                                                }
+                                                to={"/my-reviews"}
                                                 className="nav-link"
                                             >
                                                 {user.role === "student"
@@ -64,11 +60,7 @@ const Layout = ({ children }) => {
                                         </li>
                                         <li>
                                             <Link
-                                                to={
-                                                    user.role === "student"
-                                                        ? "/enrolled-posts"
-                                                        : "/my-posts"
-                                                }
+                                                to={"/my-posts"}
                                                 className="nav-link"
                                             >
                                                 {user.role === "student"

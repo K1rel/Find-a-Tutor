@@ -3,6 +3,7 @@ import { useUser } from "../../Context/UserContext";
 import { getUserPosts } from "../../services/postService";
 import styles from "../../css/users/UserPosts.module.css";
 import LoadingSpinner from "../Basic/LoadingSpinner";
+import { Link } from "react-router-dom";
 const UserPosts = () => {
     const { user } = useUser();
     const [posts, setPosts] = useState([]);
@@ -25,8 +26,6 @@ const UserPosts = () => {
         }
     }, [user]);
 
-    if (loading) return <LoadingSpinner />;
-
     return (
         <div className={styles.postsContainer}>
             <div className={styles.postsHeader}>
@@ -34,22 +33,29 @@ const UserPosts = () => {
                     {user.role === "teacher" ? "My Posts" : "My Enrolled Posts"}
                 </h2>
             </div>
-            {posts.length > 0 ? (
+            {loading ? (
+                <LoadingSpinner />
+            ) : posts.length > 0 ? (
                 <ul className={styles.postsList}>
                     {posts.map((post) => (
                         <li key={post.id} className={styles.postItem}>
-                            <h3>{post.title}</h3>
-                            <p>{post.description}</p>
-                            <p>Location: {post.location}</p>
-                            <p className={styles.rate}>
-                                Rate:{" "}
-                                {post.rate
-                                    ? `${post.rate} per hour`
-                                    : "Not specified"}
-                            </p>
-                            <p className={styles.date}>
-                                Date of First Class: {post.dateFirstClass}
-                            </p>
+                            <Link
+                                to={`/posts/${post.id}`}
+                                className={styles.postLink}
+                            >
+                                <h3>{post.title}</h3>
+                                <p>{post.description}</p>
+                                <p>Location: {post.location}</p>
+                                <p className={styles.rate}>
+                                    Rate:{" "}
+                                    {post.rate
+                                        ? `${post.rate} per hour`
+                                        : "Not specified"}
+                                </p>
+                                <p className={styles.date}>
+                                    Date of First Class: {post.dateFirstClass}
+                                </p>
+                            </Link>
                         </li>
                     ))}
                 </ul>

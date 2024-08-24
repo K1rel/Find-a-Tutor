@@ -63,6 +63,30 @@
     color: #615efc;
     transform: scale(0.95);
 }
+.resetPasswordButton {
+    display: inline-block;
+    padding: 10px 10px;
+    margin-top: 10px;
+    background-color: #615efc;
+    color: #ffffff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    border: 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.resetPasswordButton:hover {
+    background-color: #7e8ef1;
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.resetPasswordButton:active {
+    background-color: #d1d8c5;
+    color: #615efc;
+    transform: scale(0.95);
+}
 
 @media (max-width: 768px) {
     .profileContainer {

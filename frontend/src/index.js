@@ -20,6 +20,8 @@ import { UserProvider } from "./Context/UserContext";
 import TeacherProfile from "./components/Teacher/TeacherProfile";
 import MyReviews from "./components/User/MyReviews";
 import UserPosts from "./components/User/UserPosts";
+import ResetPasswordPage from "./components/User/ResetPassword";
+import ForgotPassword from "./components/User/ForgotPassword";
 
 ReactDOM.render(
     <Router>
@@ -46,6 +48,14 @@ ReactDOM.render(
                     <Route path="/write-review/:id" element={<Review />} />
                     <Route path="/my-reviews" element={<MyReviews />} />
                     <Route path="/my-posts" element={<UserPosts />} />
+                    <Route
+                        path="/password/reset-form"
+                        element={<ResetPasswordPage />}
+                    />
+                    <Route
+                        path="/forgot-password"
+                        element={<ForgotPassword />}
+                    />
                 </Routes>
             </Layout>
         </UserProvider>

@@ -104,3 +104,32 @@ export const updateUserProfile = async (profileData) => {
         throw error;
     }
 };
+
+export const requestResetPassword = async (email) => {
+    try {
+        const response = await api.post("/password/reset", { email });
+        return response.data;
+    } catch (error) {
+        console.error("Error sending password reset email:", error);
+        throw error;
+    }
+};
+export const resetPassword = async (
+    email,
+    token,
+    newPassword,
+    passwordConfirmation
+) => {
+    try {
+        const response = await api.post("/password/resetUser", {
+            email,
+            token,
+            password: newPassword,
+            password_confirmation: passwordConfirmation,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error resetting password:", error);
+        throw error;
+    }
+};

@@ -3,6 +3,8 @@ import { useUser } from "../../Context/UserContext";
 import { Link } from "react-router-dom";
 import styles from "../../css/users/Profile.module.css";
 
+import { requestResetPassword } from "../../services/userService";
+
 const Profile = () => {
     const { user, loading } = useUser();
 
@@ -10,6 +12,15 @@ const Profile = () => {
         return <div>Loading...</div>;
     }
 
+    const handlePasswordReset = async () => {
+        try {
+            await requestResetPassword(user.email);
+            alert("Password reset link has been sent to your email.");
+        } catch (error) {
+            console.error("Error sending password reset email:", error);
+            alert("Failed to send password reset email.");
+        }
+    };
     return (
         <div className={styles.profileContainer}>
             <h1 className={styles.profileTitle}>Profile</h1>
@@ -26,6 +37,12 @@ const Profile = () => {
             <Link to="/profile/edit" className={styles.editProfileLink}>
                 Edit Profile
             </Link>
+            <button
+                onClick={handlePasswordReset}
+                className={styles.resetPasswordButton}
+            >
+                Reset Password
+            </button>
         </div>
     );
 };
