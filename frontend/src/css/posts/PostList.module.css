@@ -110,3 +110,78 @@
     text-decoration: none; /* Remove underline */
     color: inherit; /* Ensure color matches the surrounding text */
 }
+/* Search bar container */
+.searchBarContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+/* Search input */
+.searchInput {
+    padding: 0.5rem 1rem;
+    border: 2px solid #5959e0; /* Primary color for border */
+    border-radius: 5px;
+    outline: none;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+.searchInput:focus {
+    border-color: #6b6bff; /* Primary color for focus */
+}
+
+/* Search button */
+.searchButton {
+    background-color: #7e8ef1; /* Primary color for background */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.searchButton:hover {
+    background-color: #5959e0; /* Primary color for hover */
+}
+
+/* Filter container */
+.filterContainer {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Filter select */
+.filterSelect {
+    padding: 0.5rem 1rem;
+    border: 2px solid #5959e0; /* Primary color for border */
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.filterSelect:focus {
+    border-color: #6b6bff; /* Primary color for focus */
+}
+
+/* Filter input */
+.filterInput {
+    padding: 0.5rem 1rem;
+    border: 2px solid #5959e0; /* Primary color for border */
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.filterInput:focus {
+    border-color: #6b6bff; /* Primary color for focus */
+}

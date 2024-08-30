@@ -82,16 +82,14 @@ const ReviewPage = () => {
             (acc, review) => acc + review.stars,
             0
         );
-        return (totalStars / reviews.length).toFixed(1); // Round to 1 decimal place
+        return (totalStars / reviews.length).toFixed(1);
     };
 
     const averageRating = calculateAverageRating(reviews);
     if (!user) {
-        return <LoadingSpinner />; // Or some other loading state
-    }
-    if (!reviews.length > 0) {
         return <LoadingSpinner />;
     }
+
     return (
         <div className={styles.reviewPageContainer}>
             <button

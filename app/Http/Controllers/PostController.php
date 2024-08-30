@@ -204,16 +204,40 @@ class PostController extends Controller
     }
     public function searchPosts(Request $request)
 {
+    Log::info('Search parameters:', $request->all());
     $query = $request->input('query');
+    $educationLevel = $request->input('education_level');
+    $tagName = $request->input('tag_name');
+    $location = $request->input('location');
 
-    if (empty($query)) {
-        return response()->json([]);
+    $postsQuery = Post::query();
+
+
+    if (!empty($query)) {
+        $postsQuery->where(function ($q) use ($query) {
+            $q->where('title', 'ILIKE', "%$query%")
+              ->orWhere('description', 'ILIKE', "%$query%");
+        });
     }
 
-    $posts = Post::where('title', 'ILIKE', "%$query%")
-        ->orWhere('description', 'ILIKE', "%$query%")
-        ->with('user', 'tag') 
-        ->get();
+   
+    if (!empty($educationLevel) || !empty($tagName)) {
+        $postsQuery->whereHas('tag', function ($q) use ($educationLevel, $tagName) {
+            if (!empty($educationLevel)) {
+                $q->where('education_level', $educationLevel);
+            }
+            if (!empty($tagName)) {
+                $q->where('name', $tagName);
+            }
+        });
+    }
+
+   
+    if (!empty($location)) {
+        $postsQuery->where('location', 'ILIKE', "%$location%");
+    }
+
+    $posts = $postsQuery->with('user', 'tag')->get();
 
     return response()->json($posts);
 }

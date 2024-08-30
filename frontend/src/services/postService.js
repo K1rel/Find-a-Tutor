@@ -78,11 +78,17 @@ export const getUserPosts = async () => {
     return response.data;
 };
 
-export const getPostsQuery = async (query = "") => {
+export const getPostsQuery = async (query = "", filters = {}) => {
     try {
         const response = await api.get(`/search/posts`, {
-            params: { query },
+            params: {
+                query: query,
+                education_level: filters.education_level || "",
+                tag_name: filters.tag_name || "",
+                location: filters.location || "",
+            },
         });
+
         return response.data;
     } catch (error) {
         console.error("Error fetching posts:", error);
