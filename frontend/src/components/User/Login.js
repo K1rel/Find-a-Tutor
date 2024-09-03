@@ -9,6 +9,7 @@ const Login = () => {
         email: "",
         password: "",
     });
+    const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -22,7 +23,11 @@ const Login = () => {
             navigate("/");
         } catch (error) {
             console.error("Login error:", error);
-            alert("Login failed.");
+            if (error.response && error.response.data.message) {
+                setErrorMessage(
+                    "Login failed. Please check your email and password."
+                );
+            }
         }
     };
 
@@ -52,6 +57,12 @@ const Login = () => {
             <Link to="/forgot-password" className={styles.forgotPasswordLink}>
                 Forgot Password?
             </Link>
+
+            {errorMessage && (
+                <div className={styles.errorPopup}>
+                    <p>{errorMessage}</p>
+                </div>
+            )}
         </form>
     );
 };

@@ -17,3 +17,7 @@ export const getMyReviews = async () => {
     const response = await api.get("/my-reviews");
     return response.data;
 };
+export const deleteReview = async (reviewId) => {
+    const response = await api.delete(`/teachers/reviews/${reviewId}`);
+    return response.data;
+};

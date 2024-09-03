@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
             $table->string('location');
             $table->string('title');
-            $table->string('description');
+            $table->string('description', 1000);
             $table->integer('maxCount');
             $table->integer('rate')->nullable();
             $table->date('dateFirstClass');

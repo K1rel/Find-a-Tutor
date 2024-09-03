@@ -2,14 +2,14 @@ import React from "react";
 import { useUser } from "../../Context/UserContext";
 import { Link } from "react-router-dom";
 import styles from "../../css/users/Profile.module.css";
-
+import LoadingSpinner from "../Basic/LoadingSpinner";
 import { requestResetPassword } from "../../services/userService";
 
 const Profile = () => {
     const { user, loading } = useUser();
 
     if (loading || !user) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner />;
     }
 
     const handlePasswordReset = async () => {

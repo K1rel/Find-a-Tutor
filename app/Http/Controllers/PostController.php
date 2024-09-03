@@ -236,7 +236,7 @@ class PostController extends Controller
     if (!empty($location)) {
         $postsQuery->where('location', 'ILIKE', "%$location%");
     }
-
+    Log::info($query);
     $posts = $postsQuery->with('user', 'tag')->get();
 
     return response()->json($posts);

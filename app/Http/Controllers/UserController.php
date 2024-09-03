@@ -65,8 +65,8 @@ class UserController extends Controller
             'availability' => 'nullable|in:online,in_person,both',
             'willing_to_travel' => 'nullable|numeric|min:0',
          
-            'languages' => 'nullable|array', // Updated to array
-            'languages.*' => 'string|max:255' 
+            'languages' => 'nullable|json'
+           
         ]);
     
         
@@ -96,8 +96,10 @@ class UserController extends Controller
             $teacherProfile->update([
                 'availability' => $validated['availability'] ?? $teacherProfile->availability,
                 'willing_to_travel' => $validated['willing_to_travel'] ?? $teacherProfile->willing_to_travel,
-                'languages' => $validated['languages'] ? json_encode($validated['languages']) : $teacherProfile->languages,
+              'languages' => $validated['languages'] ?? $teacherProfile->languages,
             ]);
+
+            
             Log::info('Teacher profile updated:', ['teacherProfile' => $teacherProfile]);
         }
     }

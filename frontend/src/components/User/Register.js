@@ -20,7 +20,7 @@ const Register = () => {
     });
 
     const [showTeacherFields, setShowTeacherFields] = useState(false);
-    const [errorMessages, setErrorMessages] = useState({});
+    const [errorMessages, setErrorMessages] = useState([]);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -59,7 +59,10 @@ const Register = () => {
         } catch (error) {
             console.error("Registration error:", error);
             if (error.response && error.response.data.errors) {
-                setErrorMessages(error.response.data.errors);
+                const allErrors = Object.values(
+                    error.response.data.errors
+                ).flat();
+                setErrorMessages(allErrors);
             } else {
                 alert("Registration failed.");
             }
@@ -155,7 +158,7 @@ const Register = () => {
                         value={formData.languages}
                         onChange={handleChange}
                         multiple
-                        className={styles.selectField}
+                        className={styles.languages}
                     >
                         {languages.map((language) => (
                             <option key={language} value={language}>
@@ -170,18 +173,13 @@ const Register = () => {
                 Register
             </button>
 
-            {Object.keys(errorMessages).length > 0 && (
+            {errorMessages.length > 0 && (
                 <div className={styles.errorPopup}>
                     <h3>Registration Error</h3>
                     <ul>
-                        {Object.entries(errorMessages).map(
-                            ([field, messages]) => (
-                                <li key={field}>
-                                    <strong>{field}:</strong>{" "}
-                                    {messages.join(" ")}
-                                </li>
-                            )
-                        )}
+                        {errorMessages.map((message, index) => (
+                            <li key={index}>{message}</li>
+                        ))}
                     </ul>
                 </div>
             )}

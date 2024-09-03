@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../../Context/UserContext";
-import { getUserPosts } from "../../services/postService";
+import {
+    getUserPosts,
+    removeStudentFromPost,
+    deletePost,
+} from "../../services/postService";
 import styles from "../../css/users/UserPosts.module.css";
 import LoadingSpinner from "../Basic/LoadingSpinner";
 import { Link } from "react-router-dom";
+
 const UserPosts = () => {
     const { user } = useUser();
     const [posts, setPosts] = useState([]);
@@ -21,10 +26,30 @@ const UserPosts = () => {
             }
         };
 
-        if (user && user.id) {
-            fetchPosts();
+        fetchPosts();
+    }, []);
+
+    const handleLeaveClass = async (postId) => {
+        try {
+            await removeStudentFromPost(postId, user.id);
+            setPosts(posts.filter((post) => post.id !== postId));
+        } catch (error) {
+            console.error("Error leaving class:", error);
         }
-    }, [user]);
+    };
+
+    const handleDeletePost = async (postId) => {
+        try {
+            await deletePost(postId);
+            setPosts(posts.filter((post) => post.id !== postId));
+        } catch (error) {
+            console.error("Error deleting post:", error);
+        }
+    };
+
+    if (!user) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className={styles.postsContainer}>
@@ -44,7 +69,6 @@ const UserPosts = () => {
                                 className={styles.postLink}
                             >
                                 <h3>{post.title}</h3>
-                                <p>{post.description}</p>
                                 <p>Location: {post.location}</p>
                                 <p className={styles.rate}>
                                     Rate:{" "}
@@ -56,6 +80,22 @@ const UserPosts = () => {
                                     Date of First Class: {post.dateFirstClass}
                                 </p>
                             </Link>
+                            {user.role === "student" && (
+                                <button
+                                    onClick={() => handleLeaveClass(post.id)}
+                                    className={styles.leaveButton}
+                                >
+                                    Leave Class
+                                </button>
+                            )}
+                            {user.role === "teacher" && (
+                                <button
+                                    onClick={() => handleDeletePost(post.id)}
+                                    className={styles.leaveButton}
+                                >
+                                    Delete Post
+                                </button>
+                            )}
                         </li>
                     ))}
                 </ul>

@@ -82,7 +82,7 @@ export const getPostsQuery = async (query = "", filters = {}) => {
     try {
         const response = await api.get(`/search/posts`, {
             params: {
-                query: query,
+                query,
                 education_level: filters.education_level || "",
                 tag_name: filters.tag_name || "",
                 location: filters.location || "",

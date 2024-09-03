@@ -16,9 +16,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('education_level');
+            $table->unique(['name', 'education_level']);
             $table->timestamps();
         });
-          // Seed the tags table with 10 random tags
+          
           $tags = [
             ['name' => 'Math', 'education_level' => 'Elementary'],
             ['name' => 'Science', 'education_level' => 'Middle School'],

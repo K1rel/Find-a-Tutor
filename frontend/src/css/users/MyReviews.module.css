@@ -81,3 +81,24 @@
     text-align: center;
     color: #666666;
 }
+.deleteButton {
+    background-color: #945bf1; /* Red color for the delete button */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-left: 10px;
+}
+
+.deleteButton:hover {
+    background-color: #d9363e; /* Darker red for hover state */
+    transform: scale(1.05);
+}
+
+.deleteButton:active {
+    background-color: #a82c2d; /* Even darker red for active state */
+    transform: scale(1);
+}

@@ -27,7 +27,7 @@ class AuthController extends Controller
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:10000',
             'availability' => 'nullable|string',
             'willing_to_travel' => 'nullable|integer|min:0',
-            'languages' => 'nullable|json', // Expect JSON
+            'languages' => 'nullable|json', 
         ]);
        
 

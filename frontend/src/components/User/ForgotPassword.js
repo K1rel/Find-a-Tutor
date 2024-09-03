@@ -5,6 +5,7 @@ import styles from "../../css/users/ForgotPassword.module.css";
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
+    const [error, setError] = useState("");
 
     const handleChange = (e) => {
         setEmail(e.target.value);
@@ -12,12 +13,14 @@ const ForgotPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
+        setMessage("");
         try {
             await requestResetPassword(email);
             setMessage("Password reset link has been sent to your email.");
         } catch (error) {
             console.error("Error sending password reset email:", error);
-            setMessage("Failed to send password reset email.");
+            setError("Failed to find your email.");
         }
     };
 
@@ -39,6 +42,7 @@ const ForgotPassword = () => {
                 </button>
             </form>
             {message && <p className={styles.message}>{message}</p>}
+            {error && <p className={styles.error}>{error}</p>}
         </div>
     );
 };

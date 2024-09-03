@@ -15,13 +15,13 @@ const ReviewPage = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
     const [hasReviewed, setHasReviewed] = useState(false);
+    const [loading, setLoading] = useState(true); // Add loading state
     const { user } = useUser();
 
     useEffect(() => {
         const fetchReviews = async () => {
             try {
                 const data = await getTeacherReviews(id);
-
                 setReviews(data.reviews);
 
                 if (user && user.id) {
@@ -34,11 +34,15 @@ const ReviewPage = () => {
                 }
             } catch (error) {
                 console.error("Error fetching reviews:", error);
+            } finally {
+                setLoading(false); // Set loading to false when data is fetched
             }
         };
 
         if (user && user.id) {
             fetchReviews();
+        } else {
+            setLoading(false); // Set loading to false if no user is logged in
         }
     }, [id, user]);
 
@@ -86,9 +90,6 @@ const ReviewPage = () => {
     };
 
     const averageRating = calculateAverageRating(reviews);
-    if (!user) {
-        return <LoadingSpinner />;
-    }
 
     return (
         <div className={styles.reviewPageContainer}>
@@ -98,66 +99,76 @@ const ReviewPage = () => {
             >
                 Go Back
             </button>
-            <div className={styles.averageRating}>
-                <h2>Average Rating</h2>
-                <p className={styles.averageRatingValue}>
-                    {averageRating} / 10
-                </p>
-            </div>
-
-            {!hasReviewed && (
-                <div className={styles.reviewForm}>
-                    <h2>Leave a Review</h2>
-                    <form onSubmit={handleReviewSubmit}>
-                        <StarRating
-                            maxRating={10}
-                            onSetRating={handleRatingChange}
-                        />
-                        <textarea
-                            className={styles.reviewTextArea}
-                            value={reviewText}
-                            onChange={(e) => setReviewText(e.target.value)}
-                            placeholder="Write your review..."
-                            required
-                        />
-                        <button
-                            type="submit"
-                            className={styles.submitButton}
-                            disabled={isSubmitting}
-                        >
-                            Submit Review
-                        </button>
-                        {error && <p className={styles.error}>{error}</p>}
-                    </form>
-                </div>
-            )}
-            <div className={styles.reviewsList}>
-                <h2>Existing Reviews</h2>
-                {reviews.length > 0 ? (
-                    reviews.map((review, index) => (
-                        <div key={index} className={styles.reviewItem}>
-                            <div className={styles.reviewHeader}>
-                                <span className={styles.studentName}>
-                                    {review.student.first_name}{" "}
-                                    {review.student.last_name}
-                                </span>
-                            </div>
-                            <div className={styles.reviewContent}>
-                                <p className={styles.reviewText}>
-                                    {review.review}
-                                </p>
-                            </div>
-                            <div className={styles.reviewMeta}>
-                                <span className={styles.reviewRating}>
-                                    {review.stars} / 10
-                                </span>
-                            </div>
+            {loading ? (
+                <LoadingSpinner />
+            ) : (
+                <>
+                    {" "}
+                    <div className={styles.averageRating}>
+                        <h2>Average Rating</h2>
+                        <p className={styles.averageRatingValue}>
+                            {averageRating} / 10
+                        </p>
+                    </div>
+                    {!hasReviewed && (
+                        <div className={styles.reviewForm}>
+                            <h2>Leave a Review</h2>
+                            <form onSubmit={handleReviewSubmit}>
+                                <StarRating
+                                    maxRating={10}
+                                    onSetRating={handleRatingChange}
+                                />
+                                <textarea
+                                    className={styles.reviewTextArea}
+                                    value={reviewText}
+                                    onChange={(e) =>
+                                        setReviewText(e.target.value)
+                                    }
+                                    placeholder="Write your review..."
+                                    required
+                                />
+                                <button
+                                    type="submit"
+                                    className={styles.submitButton}
+                                    disabled={isSubmitting}
+                                >
+                                    Submit Review
+                                </button>
+                                {error && (
+                                    <p className={styles.error}>{error}</p>
+                                )}
+                            </form>
                         </div>
-                    ))
-                ) : (
-                    <p className={styles.noReviews}>No reviews yet.</p>
-                )}
-            </div>
+                    )}
+                    <div className={styles.reviewsList}>
+                        <h2>Existing Reviews</h2>
+                        {reviews.length > 0 ? (
+                            reviews.map((review, index) => (
+                                <div key={index} className={styles.reviewItem}>
+                                    <div className={styles.reviewHeader}>
+                                        <span className={styles.studentName}>
+                                            {review.student.first_name}{" "}
+                                            {review.student.last_name}
+                                        </span>
+                                    </div>
+                                    <div className={styles.reviewContent}>
+                                        <p className={styles.reviewText}>
+                                            {review.review}
+                                        </p>
+                                    </div>
+                                    <div className={styles.reviewMeta}>
+                                        <span className={styles.reviewRating}>
+                                            {review.stars} / 10
+                                        </span>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p className={styles.noReviews}>No reviews yet.</p>
+                        )}
+                    </div>
+                </>
+            )}{" "}
         </div>
     );
 };

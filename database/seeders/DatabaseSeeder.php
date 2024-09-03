@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Post;
+use App\Models\Review;
+use App\Models\TeacherProfile;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,11 +16,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+       
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::factory(50)->create(['role' => 'student']);
+
+        // Create teachers and their profiles
+        User::factory(10)->create(['role' => 'teacher'])->each(function ($user) {
+            TeacherProfile::factory()->create(['user_id' => $user->id]);
+        });
+    
+
+      
+        Post::factory(20)->create();
+
+      
+        
+
+      
+       
     }
 }

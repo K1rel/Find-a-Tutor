@@ -61,3 +61,24 @@
 .postLink {
     text-decoration: none;
 }
+.leaveButton {
+    background-color: #945bf1; /* Red color for the delete button */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+.leaveButton:hover {
+    background-color: #d9363e; /* Darker red for hover state */
+    transform: scale(1.05);
+}
+
+.leaveButton:active {
+    background-color: #a82c2d; /* Even darker red for active state */
+    transform: scale(1);
+}

@@ -29,6 +29,7 @@ const TeacherProfile = () => {
                 const parsedLanguages = JSON.parse(
                     response.data.languages || "[]"
                 );
+
                 const createdAt = new Date(response.data.user.created_at);
 
                 setTeacher({
@@ -82,6 +83,7 @@ const TeacherProfile = () => {
                             ? teacher.languages.join(", ")
                             : "Not specified"}
                     </p>
+
                     <p>
                         <strong>Members Since:</strong> {teacher.created_at}
                     </p>

@@ -1,0 +1,35 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\Review;
+use App\Models\User;
+
+class ReviewSeeder extends Seeder
+{
+    public function run()
+    {
+        $teachers = User::where('role', 'teacher')->pluck('id')->toArray();
+        $students = User::where('role', 'student')->pluck('id')->toArray();
+
+        $reviews = [];
+
+        foreach ($teachers as $teacherId) {
+            foreach ($students as $studentId) {
+                if (!Review::where('teacher_id', $teacherId)->where('student_id', $studentId)->exists()) {
+                    $reviews[] = [
+                        'teacher_id' => $teacherId,
+                        'student_id' => $studentId,
+                        'review' => fake()->paragraph,
+                        'stars' => fake()->numberBetween(0, 10),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+            }
+        }
+
+        Review::insert($reviews);
+    }
+}

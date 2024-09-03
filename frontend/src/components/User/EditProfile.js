@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useUser } from "../../Context/UserContext";
 import { useNavigate } from "react-router-dom";
 import styles from "../../css/users/Edit.module.css";
-
+import { languages } from "../../data/languages";
+import LoadingSpinner from "../Basic/LoadingSpinner";
 const EditProfile = () => {
     const { user, loading, updateUser, profile, loggedUserProfile } = useUser();
     const [formData, setFormData] = useState({
@@ -12,7 +13,7 @@ const EditProfile = () => {
         profile_picture: profile?.profile_picture || null,
         availability: profile?.availability || "",
         willing_to_travel: profile?.willing_to_travel || "",
-        languages: profile?.languages ? profile.languages.join(", ") : "", // Updated
+        languages: profile?.languages || [],
     });
     const [file, setFile] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,9 +27,7 @@ const EditProfile = () => {
             try {
                 const updatedProfileData = {
                     ...formData,
-                    languages: formData.languages
-                        .split(",")
-                        .map((lang) => lang.trim()),
+                    languages: JSON.stringify(formData.languages),
                 };
                 if (file) {
                     updatedProfileData.profile_picture = file;
@@ -46,6 +45,7 @@ const EditProfile = () => {
 
     useEffect(() => {
         if (profile) {
+            console.log(profile);
             setFormData({
                 first_name: profile.first_name,
                 last_name: profile.last_name,
@@ -54,7 +54,9 @@ const EditProfile = () => {
                 availability: profile.teacher_profile?.availability || "",
                 willing_to_travel:
                     profile.teacher_profile?.willing_to_travel || "",
-                languages: profile.teacher_profile?.languages || "",
+                languages: Array.isArray(profile.teacher_profile?.languages)
+                    ? profile.teacher_profile.languages
+                    : JSON.parse(profile.teacher_profile?.languages || "[]"),
                 role: profile.role,
             });
         }
@@ -77,7 +79,7 @@ const EditProfile = () => {
     }, [loggedUserProfile]);
 
     if (loading && !user) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner />;
     }
 
     if (!profile || user.id !== profile.id) {
@@ -86,12 +88,19 @@ const EditProfile = () => {
 
     const handleChange = (e) => {
         if (e.target.name === "profile_picture") {
-            setFormData({ ...formData, profile_picture: e.target.files[0] });
+            setFile(e.target.files[0]);
+        } else if (e.target.name === "languages") {
+            const selectedLanguages = Array.from(e.target.options)
+                .filter((option) => option.selected)
+                .map((option) => option.value);
+            setFormData({ ...formData, languages: selectedLanguages });
         } else {
             setFormData({ ...formData, [e.target.name]: e.target.value });
         }
     };
-
+    if (loading || !profile) {
+        return <LoadingSpinner />;
+    }
     return (
         <div className={styles.editProfileContainer}>
             <h1 className={styles.title}>Edit Profile</h1>
@@ -178,14 +187,25 @@ const EditProfile = () => {
                         </label>
                         <label className={styles.label}>
                             Languages Spoken:
-                            <input
-                                type="text"
+                            <select
                                 name="languages"
                                 value={formData.languages}
                                 onChange={handleChange}
-                                className={styles.inputField}
-                                placeholder="Languages Spoken"
-                            />
+                                multiple
+                                className={styles.selectField}
+                            >
+                                {languages.map((language) => (
+                                    <option
+                                        key={language}
+                                        value={language}
+                                        selected={formData.languages.includes(
+                                            language
+                                        )}
+                                    >
+                                        {language}
+                                    </option>
+                                ))}
+                            </select>
                         </label>
                     </>
                 )}

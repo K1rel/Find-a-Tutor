@@ -19,6 +19,7 @@ const PostForm = ({ postId, onSuccess }) => {
     const [tags, setTags] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState(""); // New state for error messages
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -39,6 +40,7 @@ const PostForm = ({ postId, onSuccess }) => {
                     setIsEditing(true);
                 } catch (error) {
                     console.error("Error fetching post data:", error);
+                    setErrorMessage("Failed to load post data.");
                 } finally {
                     setIsLoading(false);
                 }
@@ -54,6 +56,7 @@ const PostForm = ({ postId, onSuccess }) => {
                 setTags(tagsData);
             } catch (error) {
                 console.error("Error fetching tags:", error);
+                setErrorMessage("Failed to load tags.");
             }
         };
 
@@ -83,6 +86,12 @@ const PostForm = ({ postId, onSuccess }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setErrorMessage("");
+        const today = new Date().toISOString().split("T")[0];
+        if (post.dateFirstClass < today) {
+            setErrorMessage("Date of the first class cannot be in the past.");
+            return;
+        }
         try {
             let newPost;
             if (isEditing) {
@@ -94,6 +103,7 @@ const PostForm = ({ postId, onSuccess }) => {
             navigate(`/posts/${newPost.id}`);
         } catch (error) {
             console.error("Error saving post:", error);
+            setErrorMessage("Failed to save post. Please check your inputs.");
         }
     };
 
@@ -213,6 +223,12 @@ const PostForm = ({ postId, onSuccess }) => {
                 <button type="submit" className={styles.submitButton}>
                     {isEditing ? "Update Post" : "Create Post"}
                 </button>
+
+                {errorMessage && (
+                    <div className={styles.errorPopup}>
+                        <p>{errorMessage}</p>
+                    </div>
+                )}
             </form>
         </div>
     );

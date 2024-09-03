@@ -87,20 +87,19 @@ class ReviewController extends Controller
     }
 
    
-    public function destroy($teacherId)
+    public function destroy($id)
     {
-        $studentId = Auth::id();
-
-        $review = Review::where('teacher_id', $teacherId)
-                        ->where('student_id', $studentId)
-                        ->firstOrFail();
-
+        $review = Review::findOrFail($id);
+    
+        if (Auth::user()->role !== 'student' || Auth::id() !== $review->student_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+    
         $review->delete();
-
-        return response()->json([
-            'message' => 'Review deleted successfully.',
-        ], 200);
+    
+        return response()->json(['message' => 'Review deleted successfully.'], 200);
     }
+    
     public function getAllReviewsForTeacher($teacherId)
     {
        

@@ -21,7 +21,7 @@ const Contact = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post("/contact", formData); // Use your custom axios instance
+            await api.post("/contact", formData);
             setStatus("Message sent successfully!");
             setFormData({ name: "", email: "", message: "" });
         } catch (error) {

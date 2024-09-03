@@ -40,9 +40,9 @@ const PostList = () => {
             setLoading(true);
             try {
                 const postsData =
-                    query.length > 0 ||
+                    searchTerm.length > 0 ||
                     Object.values(filters).some((val) => val.length > 0)
-                        ? await getPostsQuery(query, filters)
+                        ? await getPostsQuery(searchTerm, filters)
                         : await getPosts();
                 setPosts(postsData);
             } catch (error) {
@@ -53,7 +53,7 @@ const PostList = () => {
         };
 
         fetchPosts();
-    }, [query, filters]);
+    }, [searchTerm, filters]);
 
     useEffect(() => {
         const fetchTags = async () => {

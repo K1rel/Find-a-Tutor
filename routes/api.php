@@ -57,6 +57,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/teacher-profiles/{id}', [TeacherProfileController::class, 'show']);
     Route::post('/teachers/{teacherId}/reviews', [ReviewController::class, 'store']);
     Route::get('/teachers/{teacher}/reviews', [ReviewController::class, 'index']);
+    Route::delete('/teachers/reviews/{id}', [ReviewController::class, 'destroy']);
     Route::get('/teachers/{teacherId}/reviews/all', [ReviewController::class, 'getAllReviewsForTeacher']);
 });
 
@@ -64,6 +65,7 @@ Route::middleware('auth:api')->group(function () {
 
 Route::middleware('auth:api')->get('/my-reviews', [ReviewController::class, 'getMyReviews']);
 Route::middleware('auth:api')->get('/user-posts', [PostController::class, 'getUserPosts']);
+
 
 //search
 

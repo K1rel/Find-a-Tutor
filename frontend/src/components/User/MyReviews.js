@@ -1,7 +1,5 @@
-// src/components/MyReviews.js
-
 import React, { useState, useEffect } from "react";
-import { getMyReviews } from "../../services/reviewService";
+import { getMyReviews, deleteReview } from "../../services/reviewService";
 import styles from "../../css/users/MyReviews.module.css";
 import { useUser } from "../../Context/UserContext";
 import LoadingSpinner from "../Basic/LoadingSpinner";
@@ -28,6 +26,19 @@ const MyReviews = () => {
         fetchMyReviews();
     }, [user]);
 
+    const handleDeleteReview = async (reviewId) => {
+        if (window.confirm("Are you sure you want to delete this review?")) {
+            try {
+                await deleteReview(reviewId);
+                setError(null);
+                setReviews(reviews.filter((review) => review.id !== reviewId));
+            } catch (error) {
+                console.error("Error deleting review:", error);
+                setError("Error deleting review. Please try again.");
+            }
+        }
+    };
+
     if (!user) {
         return <LoadingSpinner />;
     }
@@ -48,6 +59,16 @@ const MyReviews = () => {
                                         ? `Review for ${review.teacher.first_name} ${review.teacher.last_name}`
                                         : `Review by ${review.student.first_name} ${review.student.last_name}`}
                                 </span>
+                                {user.role === "student" && (
+                                    <button
+                                        className={styles.deleteButton}
+                                        onClick={() =>
+                                            handleDeleteReview(review.id)
+                                        }
+                                    >
+                                        Delete
+                                    </button>
+                                )}
                             </div>
                             <div className={styles.reviewContent}>
                                 <p className={styles.reviewText}>
