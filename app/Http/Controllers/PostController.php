@@ -3,18 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\StudentNotification;
+use App\Mail\TeacherNotification;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
 {
     public function index()
     {
-        return Post::with('tag', 'user', 'students')->get();
+        $today = Carbon::today();
+        
+        return Post::with('tag', 'user', 'students')
+            ->whereDate('dateFirstClass', '>=', $today)
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     public function show($id)
@@ -22,23 +31,7 @@ class PostController extends Controller
         return Post::with('tag', 'user','user.teacherProfile', 'students')->findOrFail($id);
     }
 
-    // public function store(Request $request)
-    // {
-    //     // $validated = $request->validate([
-    //     //     'title' => 'required|string|max:255',
-    //     //     'description' => 'required|string',
-    //     //     'location' => 'required|string',
-    //     //     'dateFirstClass' => 'required|date',
-    //     //     'tag_id' => 'required|exists:tags,id',
-    //     //     'maxCount' => 'required|integer|min:1',
-    //     // ]);
-
-    //     // $user = Auth::user();
-
-    //     // $post = $user->posts->create(array_merge($validated, ['user_id' => $user->id]));
-
-    //     // return response()->json($post, 201);
-    // }
+  
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -53,7 +46,7 @@ class PostController extends Controller
             return response()->json(['error' => 'Unauthorized: Only teachers can create posts'], 403);
         }
     
-        // Validate incoming request
+       
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -66,12 +59,11 @@ class PostController extends Controller
         ]);
     
         try {
-            // Check if the tag exists
+           
             $tag = Tag::where('name', $validatedData['tag_name'])
                       ->where('education_level', $validatedData['education_level'])
                       ->first();
     
-            // If the tag doesn't exist, create it
             if (!$tag) {
                 $tag = Tag::create([
                     'name' => $validatedData['tag_name'],
@@ -85,10 +77,10 @@ class PostController extends Controller
                 'dateFirstClass' => $validatedData['dateFirstClass'],
                 'maxCount' => $validatedData['maxCount'],
                 'rate' => $validatedData['rate'],
-                'tag_id' => $tag->id, // Set the tag_id
-                'user_id' => auth()->id(), // Assuming you are using authentication
+                'tag_id' => $tag->id, 
+                'user_id' => auth()->id(), 
             ]);
-            // Create the post with the tag_id
+            Mail::to($user->email)->send(new TeacherNotification($user, $post));
         
     
             return response()->json($post, 201);
@@ -151,6 +143,9 @@ class PostController extends Controller
         }
 
         $post->students()->attach($user->id);
+        $teacher = $post->user;
+        Mail::to($teacher->email)->send(new TeacherNotification($teacher, $post, $user));
+        Mail::to($user->email)->send(new StudentNotification($teacher, $post, $user));
         return response()->json(['message' => 'Student added to post'], 200);
     } elseif ($user->role === 'teacher' && $post->user_id === $user->id) {
        

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Review;
+use App\Models\TeacherProfile;
 use App\Models\User;
 
 class ReviewFactory extends Factory
@@ -12,26 +13,32 @@ class ReviewFactory extends Factory
 
     public function definition()
     {
-        $teacher = User::where('role', 'teacher')->inRandomOrder()->first();
-        $student = User::where('role', 'student')->inRandomOrder()->first();
-        
+     
+         $teacherProfile = TeacherProfile::inRandomOrder()->first();
+         $student = User::where('role', 'student')->inRandomOrder()->first();
+         
       
-        $teacherId = $teacher ? $teacher->id : User::factory()->create(['role' => 'teacher'])->id;
-        $studentId = $student ? $student->id : User::factory()->create(['role' => 'student'])->id;
-
-      
-        if (Review::where('teacher_id', $teacherId)
-                  ->where('student_id', $studentId)
-                  ->exists()) {
-          
-            return $this->definition();
-        }
-
-        return [
-            'teacher_id' => $teacherId,
-            'student_id' => $studentId,
-            'review' => $this->faker->paragraph,
-            'stars' => $this->faker->numberBetween(0, 10),
-        ];
+         if (!$teacherProfile) {
+             $teacher = User::factory()->create(['role' => 'teacher']);
+             $teacherProfile = TeacherProfile::factory()->create(['user_id' => $teacher->id]);
+         }
+ 
+         if (!$student) {
+             $student = User::factory()->create(['role' => 'student']);
+         }
+ 
+     
+         if (Review::where('teacher_id', $teacherProfile->id)
+                   ->where('student_id', $student->id)
+                   ->exists()) {
+             return $this->definition();
+         }
+ 
+         return [
+             'teacher_id' => $teacherProfile->id,
+             'student_id' => $student->id,
+             'review' => $this->faker->paragraph,
+             'stars' => $this->faker->numberBetween(0, 10),
+         ];
     }
 }

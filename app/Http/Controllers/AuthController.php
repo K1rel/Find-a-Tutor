@@ -75,8 +75,8 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
-        $token = Str::random(60); // Generate a random token
-        $user->api_token = $token; // Store token in the user's record
+        $token = Str::random(60); 
+        $user->api_token = $token; 
         $user->save();
 
         return response()->json(['user' => $user, 'token' => $token]);
@@ -100,7 +100,7 @@ class AuthController extends Controller
         $user = $request->user();
 
     if ($user->role === 'teacher') {
-        $user->load('teacherProfile'); // Eager load the teacher profile relationship
+        $user->load('teacherProfile'); 
     }
 
     return response()->json(['user' => $user]);

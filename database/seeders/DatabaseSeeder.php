@@ -20,17 +20,13 @@ class DatabaseSeeder extends Seeder
 
         User::factory(50)->create(['role' => 'student']);
 
-        // Create teachers and their profiles
         User::factory(10)->create(['role' => 'teacher'])->each(function ($user) {
             TeacherProfile::factory()->create(['user_id' => $user->id]);
         });
     
-
-      
         Post::factory(20)->create();
 
-      
-        
+        Review::factory(20)->create();
 
       
        

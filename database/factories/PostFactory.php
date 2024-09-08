@@ -21,7 +21,7 @@ class PostFactory extends Factory
             'description' => $this->faker->paragraph,
             'maxCount' => $this->faker->numberBetween(1, 10),
             'rate' => $this->faker->numberBetween(10, 100),
-            'dateFirstClass' => $this->faker->date(),
+            'dateFirstClass' => $this->faker->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
         ];
     }
 }

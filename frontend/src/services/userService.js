@@ -1,8 +1,8 @@
 import api from "../axiosConfig";
 
-// Set up the API client
 
-// Register a new user
+
+
 export const registerUser = async (formData) => {
     const data = new FormData();
 
@@ -29,19 +29,19 @@ export const registerUser = async (formData) => {
     }
 };
 
-// Login a user
+
 export const loginUser = async (loginData) => {
     try {
         const response = await api.post("/login", loginData);
         const { user, token } = response.data;
-        localStorage.setItem("token", token); // Store token in localStorage
+        localStorage.setItem("token", token);
         return { user, token };
     } catch (error) {
         throw error;
     }
 };
 
-// Logout the user
+
 export const logoutUser = async () => {
     try {
         await api.post("/logout");
@@ -61,7 +61,7 @@ export const getUsers = async () => {
 };
 
 export const getCurrentUser = async () => {
-    // Ensure this matches your token storage logic
+   
     try {
         const response = await api.get("/current_user");
         return response.data.user;
