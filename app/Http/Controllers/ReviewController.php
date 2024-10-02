@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Review;
+use App\Models\TeacherProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -119,19 +120,34 @@ class ReviewController extends Controller
         ], 200);
     }
     public function getMyReviews()
-{
-    $user = Auth::user();
-
-    if ($user->role === 'student') {
-        
-        $reviews = Review::where('student_id', $user->id)->with('teacher')->get();
-    } elseif ($user->role === 'teacher') {
-        
-        $reviews = Review::where('teacher_id', $user->id)->with('student')->get();
-    } else {
-        return response()->json(['message' => 'Unauthorized'], 403);
+    {
+        $user = Auth::user();
+    
+        if ($user->role === 'student') {
+            
+            $reviews = Review::where('student_id', $user->id)->with('teacher.user')->get();
+            
+        } elseif ($user->role === 'teacher') {
+            $teacher = TeacherProfile::where('user_id',$user->id)->first();
+            Log::info($teacher);
+            $reviews = Review::where('teacher_id', $teacher->id)->with('student')->get();
+        } else {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+    
+        return response()->json(['reviews' => $reviews]);
     }
+// public function index($teacherId)
+// {
+  
+//     $teacher = TeacherProfile::findOrFail($teacherId);
+//     $teacherUser = User::findOrFail($teacher->user_id);
+//     $reviews = Review::where('teacher_id', $teacherId)->with('student')->get();
+//      Log::info($reviews);
+//     return response()->json([
+//         'teacher' => $teacherUser,
+//         'reviews' => $reviews,
+//     ]);
+// }
 
-    return response()->json(['reviews' => $reviews]);
-}
 }

@@ -44,7 +44,7 @@
 </head>
 <body>
     <div class="email-container">
-        <h1>Hello {{ $teacher->name }},</h1>
+        <h1>Hello {{ $teacher->first_name }},</h1>
 
         @if($student)
             <p>A student named <strong>{{ $student->first_name }} {{ $student->last_name }}</strong> has enrolled in your post titled <strong>"{{ $post->title }}"</strong>.</p>
